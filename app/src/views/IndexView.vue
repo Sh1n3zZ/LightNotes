@@ -67,6 +67,9 @@ function register() {
   <PopupWindow title="发送" v-model="window.send">
 
   </PopupWindow>
+  <PopupWindow title="接收" v-model="window.receive">
+
+  </PopupWindow>
   <footer>
     <span class="copyright">© 2023 LightXi Cloud</span>
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
