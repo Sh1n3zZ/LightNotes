@@ -11,22 +11,22 @@ const active = reactive({
 
 function toggleAnonymous() {
   if (active.anonymous) return active.anonymous = false;
-  active.anonymous = true;
+  setTimeout(() => active.anonymous = true, 100);
   active.user = false;
 }
 
 function toggleUser() {
   if (active.user) return active.user = false;
-  active.user = true;
+  setTimeout(() => active.user = true, 100);
   active.anonymous = false;
 }
 
 function login() {
-  location.href = "https://deeptrain.vercel.app/login";
+  location.href = "https://deeptrain.vercel.app/login?app=lightnotes";
 }
 
 function register() {
-  location.href = "https://deeptrain.vercel.app/register";
+  location.href = "https://deeptrain.vercel.app/register?app=lightnotes";
 }
 </script>
 <template>
@@ -41,8 +41,8 @@ function register() {
         </div>
       </div>
       <div class="embedded" :class="{'active': active.user}">
-        <button @click="login" class="auth login">登录</button>
-        <button @click="register" class="auth register">注册</button>
+        <button @click="login" class="button">登录</button>
+        <button @click="register" class="button">注册</button>
       </div>
     </div>
     <div class="column anonymous" @click="toggleAnonymous">
@@ -52,6 +52,10 @@ function register() {
           <span>我只想随便写写</span>
           <p>方便快捷，迅速传发，即用即走。</p>
         </div>
+      </div>
+      <div class="embedded" :class="{'active': active.anonymous}">
+        <button @click="login" class="button">发送</button>
+        <button @click="register" class="button">接收</button>
       </div>
     </div>
   </div>
@@ -110,13 +114,14 @@ h1 {
   width: 100%;
   justify-content: center;
   margin: 6px auto;
+  gap: 6px;
   height: max-content;
   max-height: 0;
-  transition: .5s ease-in-out;
+  transition: .5s;
   will-change: height;
 }
 
-.auth {
+.button {
   width: 76px;
   height: 38px;
   padding: 6px;
@@ -149,6 +154,7 @@ h1 {
 }
 
 .column svg {
+  flex-shrink: 0;
   width: 36px;
   height: 36px;
   margin: 12px 8px;
@@ -159,13 +165,28 @@ h1 {
   padding: 2px;
 }
 
+.column .button {
+  cursor: pointer;
+  transition: .25s;
+}
+
 .column.anonymous:hover {
   background: rgba(112, 192, 0, .1);
   border: 1px solid rgba(112, 192, 0, .6);
 }
 
+.column.anonymous .button:hover {
+  background: rgba(112, 192, 0, .8);
+  border: 1px solid rgba(112, 192, 0, .8);
+}
+
 .column.user:hover {
   background: rgba(88, 166, 255, .1);
   border: 1px solid rgba(88, 166, 255, .6);
+}
+
+.column.user .button:hover {
+  background: rgba(88, 166, 255, .8);
+  border: 1px solid rgba(88, 166, 255, .8);
 }
 </style>
