@@ -59,6 +59,13 @@ function register() {
       </div>
     </div>
   </div>
+  <footer>
+    <span class="copyright">© 2023 LightXi Cloud</span>
+    <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
+      <img src="/gov.webp" alt="icp" />
+      <span>粤ICP备2023066011号-1</span>
+    </a>
+  </footer>
 </template>
 
 <style scoped>
@@ -70,11 +77,12 @@ function register() {
   width: min(500px, 90%);
   height: max-content;
   overflow: hidden;
-  background-color: rgb(35,35,35);
+  background-color: rgb(30,30,30);
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   transition: .25s, max-height .5s;
+  z-index: 1;
 }
 
 h1 {
@@ -188,5 +196,56 @@ h1 {
 .column.user .button:hover {
   background: rgba(88, 166, 255, .8);
   border: 1px solid rgba(88, 166, 255, .8);
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  z-index: 0;
+}
+
+footer .copyright {
+  width: max-content;
+  color: rgba(255, 255, 255, .6);
+  margin-bottom: 4px;
+  transition: .25s;
+  margin-left: auto;
+  user-select: none;
+}
+
+.icp {
+  color: rgba(255,255,255,.6);
+  margin-left: auto;
+  text-decoration: none;
+  background: none;
+  transition: .5s;
+  user-select: none;
+}
+
+.icp img {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  vertical-align: middle;
+  opacity: .8;
+  transition: .5s;
+}
+
+.icp:hover {
+  color: #fff;
+}
+
+.icp:hover img {
+  opacity: 1;
+}
+
+@media (min-width: 500px) {
+  footer {
+    bottom: 26px;
+    right: 32px;
+  }
 }
 </style>
