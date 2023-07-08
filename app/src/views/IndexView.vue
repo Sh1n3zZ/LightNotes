@@ -3,8 +3,7 @@ import User from "@/components/icons/user.vue";
 import Group from "@/components/icons/group.vue";
 import { onMounted, reactive, ref } from "vue";
 
-const card = ref<HTMLElement>();
-const height = ref(NaN);
+
 const active = reactive({
   anonymous: false,
   user: false,
@@ -22,17 +21,16 @@ function toggleUser() {
   active.anonymous = false;
 }
 
-onMounted(() => {
-  const container = card.value;
-  if (!container) return;
-  const observer = new MutationObserver(() => {
-    height.value = container.offsetHeight;
-  });
-  observer.observe(container, { childList: true});
-})
+function login() {
+  location.href = "https://deeptrain.vercel.app/login";
+}
+
+function register() {
+  location.href = "https://deeptrain.vercel.app/register";
+}
 </script>
 <template>
-  <div class="card" ref="card" v-bind:style="{'max-height': `${height}px`}">
+  <div class="card">
     <h1>Light Notes</h1>
     <div class="column user" @click="toggleUser">
       <div class="out">
@@ -42,8 +40,9 @@ onMounted(() => {
           <p>便签数据保障，多端同步，更多高级功能。</p>
         </div>
       </div>
-      <div class="embedded" v-if="active.user">
-        <button>登录</button>
+      <div class="embedded" :class="{'active': active.user}">
+        <button @click="login" class="auth login">登录</button>
+        <button @click="register" class="auth register">注册</button>
       </div>
     </div>
     <div class="column anonymous" @click="toggleAnonymous">
@@ -101,6 +100,36 @@ h1 {
   flex-direction: row;
   align-items: center;
   width: 100%;
+}
+
+.column .embedded {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+  width: 100%;
+  justify-content: center;
+  margin: 6px auto;
+  height: max-content;
+  max-height: 0;
+  transition: .5s ease-in-out;
+  will-change: height;
+}
+
+.auth {
+  width: 76px;
+  height: 38px;
+  padding: 6px;
+  margin: 4px 12px;
+  border: 1px solid rgb(50,50,50);
+  border-radius: 6px;
+  background: rgb(40,40,40);
+  color: #fff;
+  cursor: pointer;
+}
+
+.column .embedded.active {
+  max-height: 100px;
 }
 
 .column .description {
