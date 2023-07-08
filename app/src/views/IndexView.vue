@@ -2,11 +2,16 @@
 import User from "@/components/icons/user.vue";
 import Group from "@/components/icons/group.vue";
 import { onMounted, reactive, ref } from "vue";
+import PopupWindow from "@/components/PopupWindow.vue";
 
 
 const active = reactive({
   anonymous: false,
   user: false,
+})
+const window = reactive({
+  send: false,
+  receive: false,
 })
 
 function toggleAnonymous() {
@@ -54,11 +59,14 @@ function register() {
         </div>
       </div>
       <div class="embedded" :class="{'active': active.anonymous}">
-        <button @click="login" class="button">发送</button>
-        <button @click="register" class="button">接收</button>
+        <button @click="window.send = true" class="button">发送</button>
+        <button @click="window.receive = true" class="button">接收</button>
       </div>
     </div>
   </div>
+  <PopupWindow title="发送" v-model="window.send">
+
+  </PopupWindow>
   <footer>
     <span class="copyright">© 2023 LightXi Cloud</span>
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
