@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import User from "@/components/icons/user.vue";
 import Group from "@/components/icons/group.vue";
-import { onMounted, reactive, ref } from "vue";
+import { reactive } from "vue";
+import { window } from "@/assets/script/shared";
 import PopupWindow from "@/components/PopupWindow.vue";
+import SendWindow from "@/components/SendWindow.vue";
 
 const active = reactive({
   anonymous: false,
   user: false,
-});
-const window = reactive({
-  send: false,
-  receive: false,
 });
 
 function toggleAnonymous() {
@@ -63,20 +61,7 @@ function register() {
       </div>
     </div>
   </div>
-  <PopupWindow title="发送" v-model="window.send">
-    <div class="form">
-      <div class="column">
-        <div class="row">
-          <input type="text" placeholder="请输入标题" maxlength="120" />
-        </div>
-        <div class="divider" style="background: rgb(50,50,50)" />
-        <div class="row textarea">
-          <textarea placeholder="请输入便签内容" maxlength="10240"></textarea>
-        </div>
-      </div>
-      <button class="button">发送</button>
-    </div>
-  </PopupWindow>
+  <SendWindow v-model="window.send"> </SendWindow>
   <PopupWindow title="接收" v-model="window.receive"> </PopupWindow>
   <footer>
     <span class="copyright">© 2023 LightXi Cloud</span>
@@ -110,42 +95,6 @@ h1 {
   color: white;
   text-align: center;
   margin: 20px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
-}
-
-.form .row {
-  width: 100%;
-}
-
-.form .row.textarea {
-  flex-direction: column;
-}
-
-.form span {
-  white-space: nowrap;
-  margin: auto 0;
-}
-
-.form input {
-  height: 38px;
-  font-size: 16px;
-  margin: 0 8px;
-}
-
-.form textarea {
-  scrollbar-width: none;
-  font-size: 14px;
-}
-
-.form button {
-  margin: 26px 12px;
 }
 
 .column {

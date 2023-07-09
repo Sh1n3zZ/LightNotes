@@ -181,15 +181,12 @@ onMounted(() => {
 
 @keyframes PopupAnimation {
   0% {
-    opacity: 0.6;
     transform: translate(-50%, -50%) scale(0.95);
   }
   50% {
-    opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.05);
   }
   100% {
-    opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
 }
