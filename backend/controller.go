@@ -18,8 +18,9 @@ func LoginAPI(c *gin.Context) {
 		})
 		return
 	}
-	access := Validate(form.Token)
-	if access == nil {
+
+	state, token := Login(c, form.Token)
+	if !state {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "user not found",
@@ -27,6 +28,7 @@ func LoginAPI(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"status": access.Status,
+		"status": true,
+		"token":  token,
 	})
 }

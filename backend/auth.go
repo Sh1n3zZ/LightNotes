@@ -38,18 +38,10 @@ func (u *User) Validate(c *gin.Context) bool {
 	return true
 }
 
-func IsUserExist(db *sql.DB, username string) bool {
-	var count int
-	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
-		return false
-	}
-	return count > 0
-}
-
-func GenerateToken(username, password string) string {
+func (u *User) GenerateToken() string {
 	instance := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"password": password,
+		"username": u.Username,
+		"password": u.Password,
 		"exp":      time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 	token, err := instance.SignedString([]byte(viper.GetString("secret")))
@@ -57,6 +49,14 @@ func GenerateToken(username, password string) string {
 		return ""
 	}
 	return token
+}
+
+func IsUserExist(db *sql.DB, username string) bool {
+	var count int
+	if err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count); err != nil {
+		return false
+	}
+	return count > 0
 }
 
 func ParseToken(c *gin.Context, token string) *User {
@@ -82,18 +82,36 @@ func ParseToken(c *gin.Context, token string) *User {
 	return nil
 }
 
-func Login(c *gin.Context, token string) bool {
+func Login(c *gin.Context, token string) (bool, string) {
+	// DeepTrain Token Validation
 	user := Validate(token)
 	if user == nil {
-		return false
+		return false, ""
 	}
 
 	db := c.MustGet("db").(*sql.DB)
 	if !IsUserExist(db, user.Username) {
+		// register
 		password := GenerateChar(64)
 		_ = db.QueryRow("INSERT INTO auth (bind_id, username, token, password) VALUES (?, ?, ?, ?)",
 			user.ID, user.Username, token, password)
-
+		u := &User{
+			Username: user.Username,
+			Password: password,
+		}
+		return true, u.GenerateToken()
 	}
-	return true
+
+	// login
+	_ = db.QueryRow("UPDATE auth SET token = ? WHERE username = ?", token, user.Username)
+	var password string
+	err := db.QueryRow("SELECT password FROM auth WHERE username = ?", user.Username).Scan(&password)
+	if err != nil {
+		return false, ""
+	}
+	u := &User{
+		Username: user.Username,
+		Password: password,
+	}
+	return true, u.GenerateToken()
 }
