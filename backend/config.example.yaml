@@ -1,7 +1,7 @@
 debug: true
 
 server:
-  port: 8089
+  port: 9000
 
 redis:
   host: "localhost"

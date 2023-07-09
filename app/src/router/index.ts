@@ -8,7 +8,17 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: IndexView,
-    },
+      meta: {
+        title: "Light Notes",
+      }
+    }, {
+      path: "/login",
+      name: "login",
+      component: () => import("../views/LoginView.vue"),
+      meta: {
+        title: "Login | Light Notes",
+      }
+    }
   ],
 });
 
