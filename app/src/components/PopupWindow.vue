@@ -42,6 +42,13 @@ onMounted(() => {
   </div>
 </template>
 <style>
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgb(40, 40, 40);
+  margin: 8px 0;
+}
+
 .window * {
   color: #fff;
   user-select: none;
@@ -58,9 +65,11 @@ onMounted(() => {
 
 .window .form .column {
   background: rgb(40, 40, 40);
+  margin: 0;
   padding: 8px 12px;
   border-radius: 6px;
   display: flex;
+  width: 100%;
   flex-direction: column;
   flex-wrap: nowrap;
   gap: 4px;
@@ -104,6 +113,20 @@ onMounted(() => {
   letter-spacing: 0.01cm;
 }
 
+.window textarea {
+  background: #181818;
+  margin: 2px 8px;
+  border: none;
+  padding: 16px;
+  width: calc(100% - 16px);
+  height: 240px;
+  border-radius: 16px;
+  outline: none;
+  letter-spacing: 0.01cm;
+  resize: none;
+  font-family: var(--fonts);
+}
+
 .window input[type="checkbox"] {
   width: 16px;
   height: 16px;
@@ -136,13 +159,6 @@ onMounted(() => {
   transform: translateY(-6px);
   text-align: center;
   font-size: 20px;
-}
-
-.divider {
-  width: 100%;
-  height: 1px;
-  background: rgb(40, 40, 40);
-  margin: 8px 0;
 }
 
 .window {
