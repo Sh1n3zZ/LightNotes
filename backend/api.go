@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/spf13/viper"
 )
 
@@ -23,6 +24,8 @@ func Validate(token string) *ValidateUserResponse {
 		return nil
 	}
 
-	response := res.(ValidateUserResponse)
+	converter, _ := json.Marshal(res)
+	var response ValidateUserResponse
+	_ = json.Unmarshal(converter, &response)
 	return &response
 }
