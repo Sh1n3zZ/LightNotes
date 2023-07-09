@@ -2,11 +2,12 @@
 import PopupWindow from "@/components/PopupWindow.vue";
 import { reactive, ref, watch } from "vue";
 import { window } from "@/assets/script/shared";
+import { copyText } from "@/assets/script/clipboard";
 import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
 import Notification from "@/components/Notification.vue";
 
-const loading = ref(false);
+const loader = ref(false);
 const form = reactive({
   title: "",
   body: "",
@@ -28,11 +29,11 @@ watch(message, (val) => {
 });
 
 async function send() {
-  if (loading.value) return;
-  loading.value = true;
+  if (loader.value) return;
+  loader.value = true;
   if (!form.title || !form.body) {
     message.value = "标题和内容不能为空！";
-    loading.value = false;
+    loader.value = false;
     return;
   }
 
@@ -50,7 +51,16 @@ async function send() {
     message.value = "发送失败！请检查您的网络环境";
   }
 
-  loading.value = false;
+  loader.value = false;
+}
+
+async function copy() {
+  if (!code.value) return;
+  if (await copyText(code.value)) {
+    message.value = "复制成功！";
+  } else {
+    message.value = "复制失败！请检查您的浏览器是否支持";
+  }
 }
 </script>
 
@@ -64,6 +74,9 @@ async function send() {
       <div class="code">
         <div v-for="(value, index) in code" :key="index" :style="{'animation-delay': index * 100 + 'ms'}">{{ value }}</div>
       </div>
+      <button class="button copy" @click="copy">
+        <span>复制</span>
+      </button>
     </div>
     <div class="form" v-else>
       <div class="column">
@@ -76,7 +89,7 @@ async function send() {
         </div>
       </div>
       <button class="button" @click="send">
-        <loading class="loading" v-if="loading" />
+        <loading class="loading" v-if="loader" />
         <span v-else>发送</span>
       </button>
     </div>
@@ -171,6 +184,10 @@ async function send() {
   color: #fff;
   cursor: pointer;
   transition: .25s;
+}
+
+.button.copy {
+  margin-top: 94px;
 }
 
 .button span {
