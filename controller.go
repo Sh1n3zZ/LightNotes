@@ -5,16 +5,28 @@ import (
 	"net/http"
 )
 
+type LoginForm struct {
+	Token string `form:"token" binding:"required"`
+}
+
 func LoginAPI(c *gin.Context) {
-	token := c.Query("token")
-	if token == "" {
-		c.JSON(400, gin.H{
-			"error": "token is required",
+	var form LoginForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "bad request",
 		})
 		return
 	}
-	access := Validate(token)
+	access := Validate(form.Token)
+	if access == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"status": access,
+		"status": access.Status,
 	})
 }
