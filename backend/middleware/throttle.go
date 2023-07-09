@@ -28,8 +28,8 @@ func (l *Limiter) RateLimit(ctx context.Context, rds *redis.Client, ip string, p
 
 var limits = map[string]Limiter{
 	"/login":          {Duration: 10, Count: 5},
-	"/anonymous/send": {Duration: 60, Count: 5},
-	"/anonymous/get":  {Duration: 1, Count: 1},
+	"/anonymous/send": {Duration: 60, Count: 10},
+	"/anonymous/get":  {Duration: 1, Count: 2},
 }
 
 func GetPrefixMap[T comparable](s string, p map[string]T) *T {

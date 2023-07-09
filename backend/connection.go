@@ -27,6 +27,7 @@ func ConnectMySQL() *sql.DB {
 	}
 
 	CreateUserTable(db)
+	CreateNoteTable(db)
 	return db
 }
 
@@ -38,6 +39,22 @@ func CreateUserTable(db *sql.DB) {
 		  username VARCHAR(24) UNIQUE,
 		  token VARCHAR(255) NOT NULL,
 		  password VARCHAR(64) NOT NULL
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CreateNoteTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS notes (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  user_id INT UNIQUE,
+		  title VARCHAR(120) NOT NULL,
+		  content TEXT(40000) NOT NULL,
+		  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  FOREIGN KEY (user_id) REFERENCES notes.auth(id)
 		);
 	`)
 	if err != nil {

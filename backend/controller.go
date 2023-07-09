@@ -51,7 +51,7 @@ func AnonymousSendAPI(c *gin.Context) {
 		return
 	}
 
-	if len(form.Title) > 1024 || len(form.Body) > 1024*20 {
+	if len(form.Title) > 120 || len(form.Body) > 1024*10 {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "title or body too long",

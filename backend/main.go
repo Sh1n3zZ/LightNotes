@@ -24,6 +24,7 @@ func main() {
 	{
 		app.Use(middleware.BuiltinMiddleWare(ConnectMySQL(), ConnectRedis()))
 		app.Use(middleware.ThrottleMiddleware())
+		app.Use(AuthMiddleware())
 	}
 	{
 		app.POST("/login", LoginAPI)

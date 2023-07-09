@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"strings"
 	"time"
 )
 
@@ -114,4 +115,24 @@ func Login(c *gin.Context, token string) (bool, string) {
 		Password: password,
 	}
 	return true, u.GenerateToken()
+}
+
+func AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := strings.TrimSpace(c.GetHeader("Authorization"))
+		if token != "" {
+			if user := ParseToken(c, token); user != nil {
+				c.Set("token", token)
+				c.Set("auth", true)
+				c.Set("user", user.Username)
+				c.Next()
+				return
+			}
+		}
+
+		c.Set("token", token)
+		c.Set("auth", false)
+		c.Set("user", "")
+		c.Next()
+	}
 }
