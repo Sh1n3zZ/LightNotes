@@ -6,8 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"net/http"
+	"strconv"
 	"time"
 )
+
+const PaginationSize = 10
 
 type LoginForm struct {
 	Token string `form:"token" binding:"required"`
@@ -16,6 +19,12 @@ type LoginForm struct {
 type NoteForm struct {
 	Title string `form:"title" binding:"required"`
 	Body  string `form:"body" binding:"required"`
+}
+
+type Note struct {
+	ID    int64  `json:"id"`
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
 func LoginAPI(c *gin.Context) {
@@ -248,5 +257,123 @@ func UserUpdateAPI(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
+	})
+}
+
+func UserDeleteAPI(c *gin.Context) {
+	username := c.MustGet("user").(string)
+	noteID := c.Query("id")
+
+	if len(username) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	db := c.MustGet("db").(*sql.DB)
+	var id int
+	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", username).Scan(&id); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	_, err := db.Exec("DELETE FROM notes WHERE user_id = ? AND id = ?", id, noteID)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "internal error",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+	})
+}
+
+func UserListAPI(c *gin.Context) {
+	// pagination
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "bad request",
+		})
+	}
+
+	username := c.MustGet("user").(string)
+
+	if len(username) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	db := c.MustGet("db").(*sql.DB)
+	var total int
+	if err := db.QueryRow("SELECT COUNT(*) FROM notes").Scan(&total); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "internal error",
+		})
+		return
+	}
+
+	if total%PaginationSize > 0 {
+		total = total/PaginationSize + 1
+	} else {
+		total = total / PaginationSize
+	}
+
+	if page > total {
+		page = total
+	}
+
+	var id int
+	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", username).Scan(&id); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
+	rows, err := db.Query("SELECT id, title, content FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "internal error",
+		})
+		return
+	}
+	defer rows.Close()
+
+	notes := make([]Note, 0)
+	for rows.Next() {
+		var note Note
+		if err := rows.Scan(&note.ID, &note.Title, &note.Body); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status": false,
+				"error":  "internal error",
+			})
+			return
+		}
+		notes = append(notes, note)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":    true,
+		"total":     total,
+		"page":      page,
+		"next_page": page+1 <= total,
+		"prev_page": page-1 >= 0,
+		"notes":     notes,
 	})
 }
