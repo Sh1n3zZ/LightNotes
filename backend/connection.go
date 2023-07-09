@@ -25,7 +25,24 @@ func ConnectMySQL() *sql.DB {
 	} else {
 		log.Println("Connected to MySQL server successfully")
 	}
+
+	CreateUserTable(db)
 	return db
+}
+
+func CreateUserTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS auth (
+		  id INT PRIMARY KEY AUTO_INCREMENT,
+		  bind_id INT UNIQUE,
+		  username VARCHAR(24) UNIQUE,
+		  token VARCHAR(255) NOT NULL,
+		  password VARCHAR(64) NOT NULL
+		);
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func ConnectRedis() *redis.Client {

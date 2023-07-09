@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
+	crand "crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"io"
+	"math/rand"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 func Sha2Encrypt(raw string) string {
@@ -26,7 +28,7 @@ func AES256Encrypt(key string, data string) (string, error) {
 	}
 
 	iv := make([]byte, aes.BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+	if _, err := io.ReadFull(crand.Reader, iv); err != nil {
 		return "", err
 	}
 
@@ -115,4 +117,21 @@ func PostForm(uri string, body map[string]interface{}) (data map[string]interfac
 	}
 
 	return data, nil
+}
+
+func GenerateCode(length int) string {
+	var code string
+	for i := 0; i < length; i++ {
+		code += strconv.Itoa(rand.Intn(10))
+	}
+	return code
+}
+
+func GenerateChar(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	result := make([]byte, length)
+	for i := 0; i < length; i++ {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
 }
