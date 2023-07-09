@@ -1,4 +1,4 @@
 .idea
 lightnotes
 lightnotes.exe
-config.yaml
+backend/config.yaml

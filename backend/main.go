@@ -26,7 +26,7 @@ func main() {
 		app.Use(middleware.ThrottleMiddleware())
 	}
 	{
-		app.GET("/login", LoginAPI)
+		app.POST("/login", LoginAPI)
 	}
 
 	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
