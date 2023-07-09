@@ -5,12 +5,18 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
 )
+
+func Sha2Encrypt(raw string) string {
+	hash := sha256.Sum256([]byte(raw))
+	return hex.EncodeToString(hash[:])
+}
 
 func AES256Encrypt(key string, data string) (string, error) {
 	text := []byte(data)

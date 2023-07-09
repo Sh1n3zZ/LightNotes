@@ -15,3 +15,7 @@ mysql:
   user: root
   password: ""
   db: "notes"
+
+auth:
+  access: ...
+  salt: ...

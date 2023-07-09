@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"lightnotes/middleware"
 )
 
 func main() {
@@ -16,10 +17,16 @@ func main() {
 
 	if viper.GetBool("debug") {
 		gin.SetMode(gin.DebugMode)
-		app.Use(gin.Logger())
-		app.Use(gin.Recovery())
 	} else {
 		gin.SetMode(gin.ReleaseMode)
+	}
+
+	{
+		app.Use(middleware.BuiltinMiddleWare(ConnectMySQL(), ConnectRedis()))
+		app.Use(middleware.ThrottleMiddleware())
+	}
+	{
+		app.GET("/login", LoginAPI)
 	}
 
 	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
