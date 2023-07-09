@@ -1,32 +1,53 @@
 <script setup lang="ts">
 import PopupWindow from "@/components/PopupWindow.vue";
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { window } from "@/assets/script/shared";
 import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
+import Notification from "@/components/Notification.vue";
 
 const loading = ref(false);
+const form = reactive({
+  title: "",
+  content: "",
+});
+const message = ref("");
+watch(message, (val) => {
+  if (!val) return;
+  setTimeout(() => (message.value = ""), 5000);
+});
 
 async function send() {
   if (loading.value) return;
   loading.value = true;
-  await axios.post("/user/send", {
-    title: "",
-    content: "",
-  });
+  if (!form.title || !form.content) {
+    message.value = "标题和内容不能为空！";
+    loading.value = false;
+    return;
+  }
+  try {
+    const data = await axios.post("/anonymous/send", form);
+  } catch (e) {
+    message.value = "发送失败！请检查您的网络环境";
+  }
+
+  loading.value = false;
 }
 </script>
 
 <template>
+  <Notification v-if="message">
+    {{ message }}
+  </Notification>
   <PopupWindow title="发送" v-model="window.send">
     <div class="form">
       <div class="column">
         <div class="row">
-          <input type="text" placeholder="请输入标题" maxlength="120" />
+          <input type="text" placeholder="请输入标题" maxlength="120" v-model="form.title" />
         </div>
         <div class="divider" style="background: rgb(50,50,50)" />
         <div class="row textarea">
-          <textarea placeholder="请输入便签内容" maxlength="10240"></textarea>
+          <textarea placeholder="请输入便签内容" maxlength="10240" v-model="form.content"></textarea>
         </div>
       </div>
       <button class="button" @click="send">

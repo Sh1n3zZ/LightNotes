@@ -33,7 +33,10 @@ function register() {
 </script>
 <template>
   <div class="card">
-    <h1>Light Notes</h1>
+    <div class="title">
+      <img src="/favicon.ico" alt="" />
+      <h1>Light Notes</h1>
+    </div>
     <div class="column user" @click="toggleUser">
       <div class="out">
         <user />
@@ -89,12 +92,25 @@ function register() {
   z-index: 1;
 }
 
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.title img {
+  width: 42px;
+  height: 42px;
+  margin-right: 12px;
+}
+
 h1 {
   font-size: 24px;
   user-select: none;
   color: white;
   text-align: center;
-  margin: 20px;
 }
 
 .column {
