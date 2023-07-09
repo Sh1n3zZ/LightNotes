@@ -11,8 +11,9 @@ onMounted(async () => {
   const client = url.searchParams.get("token");
   try {
     const res = await axios.post("/login", {
-      token: client,
-    }), data = res.data;
+        token: client,
+      }),
+      data = res.data;
     if (data.status) {
       token.value = data.token;
       message.value = "登录成功！正在跳转中...";
@@ -35,8 +36,12 @@ onMounted(async () => {
     <template v-else>
       <span class="title">正在校验中...</span>
       <div class="wrapper">
-        <div class="circle" /><div class="circle" /><div class="circle" />
-        <div class="shadow" /><div class="shadow" /><div class="shadow" />
+        <div class="circle" />
+        <div class="circle" />
+        <div class="circle" />
+        <div class="shadow" />
+        <div class="shadow" />
+        <div class="shadow" />
       </div>
     </template>
   </div>
@@ -57,7 +62,7 @@ onMounted(async () => {
   fill: #fff;
   width: 46px;
   height: 46px;
-  animation: FadeInAnimation .2s;
+  animation: FadeInAnimation 0.2s;
   margin: 16px 0;
 }
 
@@ -66,7 +71,7 @@ onMounted(async () => {
   font-size: 18px;
   text-align: center;
   user-select: none;
-  animation: FadeInAnimation .25s;
+  animation: FadeInAnimation 0.25s;
 }
 
 @keyframes FadeInAnimation {
@@ -84,7 +89,7 @@ onMounted(async () => {
   padding: 18px 12px;
   margin-bottom: 24px;
   font-size: 24px;
-  color: rgba(255, 255, 255, .9);
+  color: rgba(255, 255, 255, 0.9);
   text-align: center;
 }
 
@@ -103,7 +108,7 @@ onMounted(async () => {
   background-color: #fff;
   left: 15%;
   transform-origin: 50%;
-  animation: CircleAnimation .5s alternate infinite ease;
+  animation: CircleAnimation 0.5s alternate infinite ease;
 }
 
 @keyframes CircleAnimation {
@@ -127,27 +132,27 @@ onMounted(async () => {
 
 .circle:nth-child(2) {
   left: 45%;
-  animation-delay: .2s;
+  animation-delay: 0.2s;
 }
 
 .circle:nth-child(3) {
   left: auto;
   right: 15%;
-  animation-delay: .3s;
+  animation-delay: 0.3s;
 }
 
 .shadow {
   width: 20px;
   height: 4px;
   border-radius: 50%;
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0, 0, 0, 0.9);
   position: absolute;
   top: 62px;
   transform-origin: 50%;
   z-index: -1;
   left: 15%;
   filter: blur(1px);
-  animation: ShadowAnimation .5s alternate infinite ease;
+  animation: ShadowAnimation 0.5s alternate infinite ease;
 }
 
 @keyframes ShadowAnimation {
@@ -157,24 +162,23 @@ onMounted(async () => {
 
   40% {
     transform: scaleX(1);
-    opacity: .7;
+    opacity: 0.7;
   }
 
   100% {
-    transform: scaleX(.2);
-    opacity: .4;
+    transform: scaleX(0.2);
+    opacity: 0.4;
   }
 }
 
 .shadow:nth-child(4) {
   left: 45%;
-  animation-delay: .2s
+  animation-delay: 0.2s;
 }
 
 .shadow:nth-child(5) {
   left: auto;
   right: 15%;
-  animation-delay: .3s;
+  animation-delay: 0.3s;
 }
-
 </style>

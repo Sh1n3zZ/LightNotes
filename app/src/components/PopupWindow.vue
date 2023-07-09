@@ -1,36 +1,40 @@
 <script setup lang="ts">
 import Close from "@/components/icons/close.vue";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
 const props = defineProps<{
-  title: string,
-  modelValue: boolean,
+  title: string;
+  modelValue: boolean;
 }>();
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 const window = ref<HTMLElement | null>(null);
 
 const start = ref<number>(NaN);
 
 onMounted(() => {
   if (window.value === null) return;
-  window.value.addEventListener('touchstart', (e) => {
+  window.value.addEventListener("touchstart", (e) => {
     start.value = e.touches[0].clientY;
-  })
-  window.value.addEventListener('touchmove', (e) => {
+  });
+  window.value.addEventListener("touchmove", (e) => {
     e.preventDefault();
     if (window.value === null) return;
     const current = e.touches[0].clientY;
     const height = current - start.value;
     start.value = current;
     window.value.scrollTop = window.value.scrollTop - height;
-  })
-})
+  });
+});
 </script>
 
 <template>
-  <div class="window" :class="{'active': props.modelValue}">
+  <div class="window" :class="{ active: props.modelValue }">
     <h1 class="title">{{ title }}</h1>
-    <close class="close" @click="emit('update:modelValue', false)" viewBox="0 0 512 512" />
+    <close
+      class="close"
+      @click="emit('update:modelValue', false)"
+      viewBox="0 0 512 512"
+    />
     <div class="divider" />
     <div class="main" ref="window">
       <slot />
@@ -114,7 +118,7 @@ onMounted(() => {
 }
 
 .window select {
-  background: rgb(30,30,30);
+  background: rgb(30, 30, 30);
   border: none;
   border-radius: 4px;
   padding: 4px 8px 4px 8px;
@@ -122,7 +126,7 @@ onMounted(() => {
 }
 
 .window select option {
-  background: rgb(40,40,40);
+  background: rgb(40, 40, 40);
   border: none;
   border-radius: 4px;
 }
@@ -137,10 +141,9 @@ onMounted(() => {
 .divider {
   width: 100%;
   height: 1px;
-  background: rgb(40,40,40);
+  background: rgb(40, 40, 40);
   margin: 8px 0;
 }
-
 
 .window {
   position: absolute;
@@ -148,11 +151,11 @@ onMounted(() => {
   border: 0;
   top: 50%;
   left: 50%;
-  transition: .5s;
+  transition: 0.5s;
   transform: translate(-50%, -50%);
   width: calc(100% - 52px);
   height: min(80%, 540px);
-  background: rgb(30,30,30);
+  background: rgb(30, 30, 30);
   border-radius: 10px;
   max-width: 640px;
   z-index: -64;
@@ -162,11 +165,11 @@ onMounted(() => {
 
 @keyframes PopupAnimation {
   0% {
-    opacity: .6;
+    opacity: 0.6;
     transform: translate(-50%, -50%) scale(0.95);
   }
   50% {
-    opacity: .8;
+    opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.05);
   }
   100% {
@@ -178,7 +181,7 @@ onMounted(() => {
 .window.active {
   z-index: 64;
   opacity: 1;
-  animation: PopupAnimation .5s ease-in-out;
+  animation: PopupAnimation 0.5s ease-in-out;
 }
 
 .main {
@@ -198,14 +201,13 @@ onMounted(() => {
   right: 18px;
   top: 18px;
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
   border-radius: 6px;
-  stroke: rgba(255,255,255,0.8);
+  stroke: rgba(255, 255, 255, 0.8);
 }
 
-
 .close:hover {
-  background: rgb(40,40,40);
+  background: rgb(40, 40, 40);
   stroke: #fff;
 }
 </style>

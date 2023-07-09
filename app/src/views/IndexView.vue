@@ -4,25 +4,24 @@ import Group from "@/components/icons/group.vue";
 import { onMounted, reactive, ref } from "vue";
 import PopupWindow from "@/components/PopupWindow.vue";
 
-
 const active = reactive({
   anonymous: false,
   user: false,
-})
+});
 const window = reactive({
   send: false,
   receive: false,
-})
+});
 
 function toggleAnonymous() {
-  if (active.anonymous) return active.anonymous = false;
-  setTimeout(() => active.anonymous = true, 100);
+  if (active.anonymous) return (active.anonymous = false);
+  setTimeout(() => (active.anonymous = true), 100);
   active.user = false;
 }
 
 function toggleUser() {
-  if (active.user) return active.user = false;
-  setTimeout(() => active.user = true, 100);
+  if (active.user) return (active.user = false);
+  setTimeout(() => (active.user = true), 100);
   active.anonymous = false;
 }
 
@@ -45,7 +44,7 @@ function register() {
           <p>便签数据保障，多端同步，更多高级功能。</p>
         </div>
       </div>
-      <div class="embedded" :class="{'active': active.user}">
+      <div class="embedded" :class="{ active: active.user }">
         <button @click="login" class="button">登录</button>
         <button @click="register" class="button">注册</button>
       </div>
@@ -58,18 +57,14 @@ function register() {
           <p>方便快捷，迅速传发，即用即走。</p>
         </div>
       </div>
-      <div class="embedded" :class="{'active': active.anonymous}">
+      <div class="embedded" :class="{ active: active.anonymous }">
         <button @click="window.send = true" class="button">发送</button>
         <button @click="window.receive = true" class="button">接收</button>
       </div>
     </div>
   </div>
-  <PopupWindow title="发送" v-model="window.send">
-
-  </PopupWindow>
-  <PopupWindow title="接收" v-model="window.receive">
-
-  </PopupWindow>
+  <PopupWindow title="发送" v-model="window.send"> </PopupWindow>
+  <PopupWindow title="接收" v-model="window.receive"> </PopupWindow>
   <footer>
     <span class="copyright">© 2023 LightXi Cloud</span>
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
@@ -88,11 +83,11 @@ function register() {
   width: min(500px, 90%);
   height: max-content;
   overflow: hidden;
-  background-color: rgb(30,30,30);
+  background-color: rgb(30, 30, 30);
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  transition: .25s, max-height .5s;
+  transition: 0.25s, max-height 0.5s;
   z-index: 1;
 }
 
@@ -112,8 +107,8 @@ h1 {
   margin: 26px;
   padding: 8px 16px;
   border-radius: 8px;
-  transition: .25s;
-  border: 1px solid rgba(50,50,50);
+  transition: 0.25s;
+  border: 1px solid rgba(50, 50, 50);
   user-select: none;
   cursor: pointer;
 }
@@ -136,7 +131,7 @@ h1 {
   gap: 6px;
   height: max-content;
   max-height: 0;
-  transition: .5s;
+  transition: 0.5s;
   will-change: height;
 }
 
@@ -145,9 +140,9 @@ h1 {
   height: 38px;
   padding: 6px;
   margin: 4px 12px;
-  border: 1px solid rgb(50,50,50);
+  border: 1px solid rgb(50, 50, 50);
   border-radius: 6px;
-  background: rgb(40,40,40);
+  background: rgb(40, 40, 40);
   color: #fff;
   cursor: pointer;
 }
@@ -169,7 +164,7 @@ h1 {
 
 .column .description p {
   font-size: 14px;
-  color: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .column svg {
@@ -186,27 +181,27 @@ h1 {
 
 .column .button {
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .column.anonymous:hover {
-  background: rgba(112, 192, 0, .1);
-  border: 1px solid rgba(112, 192, 0, .6);
+  background: rgba(112, 192, 0, 0.1);
+  border: 1px solid rgba(112, 192, 0, 0.6);
 }
 
 .column.anonymous .button:hover {
-  background: rgba(112, 192, 0, .8);
-  border: 1px solid rgba(112, 192, 0, .8);
+  background: rgba(112, 192, 0, 0.8);
+  border: 1px solid rgba(112, 192, 0, 0.8);
 }
 
 .column.user:hover {
-  background: rgba(88, 166, 255, .1);
-  border: 1px solid rgba(88, 166, 255, .6);
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.6);
 }
 
 .column.user .button:hover {
-  background: rgba(88, 166, 255, .8);
-  border: 1px solid rgba(88, 166, 255, .8);
+  background: rgba(88, 166, 255, 0.8);
+  border: 1px solid rgba(88, 166, 255, 0.8);
 }
 
 footer {
@@ -220,19 +215,19 @@ footer {
 
 footer .copyright {
   width: max-content;
-  color: rgba(255, 255, 255, .6);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 4px;
-  transition: .25s;
+  transition: 0.25s;
   margin-left: auto;
   user-select: none;
 }
 
 .icp {
-  color: rgba(255,255,255,.6);
+  color: rgba(255, 255, 255, 0.6);
   margin-left: auto;
   text-decoration: none;
   background: none;
-  transition: .5s;
+  transition: 0.5s;
   user-select: none;
 }
 
@@ -241,8 +236,8 @@ footer .copyright {
   height: 16px;
   margin-right: 4px;
   vertical-align: middle;
-  opacity: .8;
-  transition: .5s;
+  opacity: 0.8;
+  transition: 0.5s;
 }
 
 .icp:hover {
