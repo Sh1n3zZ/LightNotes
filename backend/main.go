@@ -30,6 +30,9 @@ func main() {
 		app.POST("/login", LoginAPI)
 		app.POST("/anonymous/send", AnonymousSendAPI)
 		app.GET("/anonymous/get", AnonymousGetAPI)
+		app.POST("/user/save", UserSaveAPI)
+		app.GET("/user/get", UserGetAPI)
+		app.POST("/user/update", UserUpdateAPI)
 	}
 
 	if err := app.Run(fmt.Sprintf(":%s", viper.GetString("server.port"))); err != nil {
