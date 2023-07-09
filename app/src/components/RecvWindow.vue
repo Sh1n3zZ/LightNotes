@@ -2,7 +2,6 @@
 import PopupWindow from "@/components/PopupWindow.vue";
 import { reactive, ref, watch } from "vue";
 import { window } from "@/assets/script/shared";
-import { copyText } from "@/assets/script/clipboard";
 import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
 import Notification from "@/components/Notification.vue";
@@ -14,13 +13,14 @@ const form = reactive({
 });
 
 watch(window, val => {
-  if (!val.send) {
+  if (!val.receive) {
     code.value = "";
     form.title = "";
     form.body = "";
   }
 });
 
+const get = ref(false);
 const code = ref("");
 const message = ref("");
 watch(message, (val) => {
@@ -28,39 +28,32 @@ watch(message, (val) => {
   setTimeout(() => (message.value = ""), 5000);
 });
 
-async function send() {
+async function recv() {
   if (loader.value) return;
   loader.value = true;
-  if (!form.title || !form.body) {
-    message.value = "标题和内容不能为空！";
+
+  const param = code.value.trim();
+  if (param.length !== 8) {
+    message.value = "请输入正确的接签码";
     loader.value = false;
     return;
   }
 
   try {
-    const data = (await axios.post("/anonymous/send", form)).data;
+    const data = (await axios.get("/anonymous/get?code=" + param)).data;
     if (data.status) {
-      code.value = data.code;
-      message.value = "发送成功！";
-      form.title = "";
-      form.body = "";
+      get.value = true;
+      message.value = "接收成功！";
+      form.title = data.title;
+      form.body = data.body;
     } else {
-      message.value = "发送失败！请稍后重试";
+      message.value = "接收失败！请检查您的接签码是否正确，匿名便签是否过期";
     }
   } catch (e) {
-    message.value = "发送失败！请检查您的网络环境";
+    message.value = "接收失败！请检查您的网络环境";
   }
 
   loader.value = false;
-}
-
-async function copy() {
-  if (!code.value) return;
-  if (await copyText(code.value)) {
-    message.value = "复制成功！";
-  } else {
-    message.value = "复制失败！请检查您的浏览器是否支持";
-  }
 }
 </script>
 
@@ -68,30 +61,25 @@ async function copy() {
   <Notification v-if="message">
     {{ message }}
   </Notification>
-  <PopupWindow title="发送" v-model="window.send">
-    <div class="form" v-if="code">
-      <span class="message">您的接签码为：</span>
-      <div class="code">
-        <div v-for="(value, index) in code" :key="index" :style="{'animation-delay': index * 100 + 'ms'}">{{ value }}</div>
-      </div>
-      <button class="button copy" @click="copy">
-        <span>复制</span>
+  <PopupWindow title="接收" v-model="window.receive">
+    <div class="form" v-if="!get">
+      <span class="message">请输入您的接签码</span>
+      <input class="input" v-model="code" maxlength="8" />
+      <button class="button" @click="recv" style="transform: translateY(120px)">
+        <loading class="loading" v-if="loader" />
+        <span v-else>接收</span>
       </button>
     </div>
     <div class="form" v-else>
       <div class="column">
         <div class="row">
-          <input type="text" placeholder="请输入标题" maxlength="120" v-model="form.title" />
+          <input type="text" placeholder="标题" v-model="form.title" readonly />
         </div>
         <div class="divider" style="background: rgb(50,50,50)" />
         <div class="row textarea">
-          <textarea placeholder="请输入便签内容" maxlength="10240" v-model="form.body" />
+          <textarea placeholder="便签内容" v-model="form.body" readonly />
         </div>
       </div>
-      <button class="button" @click="send">
-        <loading class="loading" v-if="loader" />
-        <span v-else>发送</span>
-      </button>
     </div>
   </PopupWindow>
 </template>
@@ -109,27 +97,6 @@ async function copy() {
   width: 100%;
 }
 
-.code {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  width: 100%;
-  margin: 12px 0;
-}
-
-.code div {
-  height: max-content;
-  font-size: 36px;
-  padding: 2px 12px;
-  margin: 4px;
-  opacity: 0;
-  color: rgb(94, 176, 253);
-  background: rgb(40,40,40);
-  border-radius: 4px;
-  animation: FadeInAnimation 1s ease-in-out forwards;
-}
-
 .message {
   font-size: 24px;
   margin: 42px !important;
@@ -143,6 +110,17 @@ async function copy() {
   height: 16px;
   margin: 4px;
   animation: RotateAnimation 2s linear infinite;
+}
+
+.input {
+  width: 100%;
+  height: 64px !important;
+  font-size: 32px !important;
+  margin: 0 24px !important;
+  letter-spacing: 6px;
+  text-align: center;
+  border-radius: 12px;
+  max-width: 420px;
 }
 
 .form .row.textarea {
@@ -186,10 +164,6 @@ async function copy() {
   transition: .25s;
 }
 
-.button.copy {
-  margin-top: 94px;
-}
-
 .button span {
   margin: 4px;
 }
@@ -213,15 +187,6 @@ async function copy() {
   }
   to {
     opacity: 1;
-  }
-}
-
-@media (max-width: 620px) {
-  .code {
-    flex-wrap: wrap;
-  }
-  .code div {
-    font-size: 26px;
   }
 }
 </style>

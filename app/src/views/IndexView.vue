@@ -3,8 +3,8 @@ import User from "@/components/icons/user.vue";
 import Group from "@/components/icons/group.vue";
 import { reactive } from "vue";
 import { window } from "@/assets/script/shared";
-import PopupWindow from "@/components/PopupWindow.vue";
 import SendWindow from "@/components/SendWindow.vue";
+import RecvWindow from "@/components/RecvWindow.vue";
 
 const active = reactive({
   anonymous: false,
@@ -65,7 +65,7 @@ function register() {
     </div>
   </div>
   <SendWindow v-model="window.send"> </SendWindow>
-  <PopupWindow title="接收" v-model="window.receive"> </PopupWindow>
+  <RecvWindow v-model="window.receive"> </RecvWindow>
   <footer>
     <span class="copyright">© 2023 LightXi Cloud</span>
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">

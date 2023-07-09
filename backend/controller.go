@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -72,10 +73,18 @@ func AnonymousSendAPI(c *gin.Context) {
 	cache := c.MustGet("cache").(*redis.Client)
 	for {
 		code := GenerateCode(8)
-		key := fmt.Sprintf("note:anymous:%s", GenerateCode(8))
+		key := fmt.Sprintf("note:anymous:%s", code)
 		res := cache.Get(c, key)
 		if res.Err() != nil && len(res.Val()) == 0 {
-			cache.Set(c, key, form, time.Hour*24)
+			data, err := json.Marshal(form)
+			if err != nil {
+				c.JSON(http.StatusOK, gin.H{
+					"status": false,
+					"error":  "internal error",
+				})
+				return
+			}
+			cache.Set(c, key, data, time.Hour*24)
 			c.JSON(http.StatusOK, gin.H{
 				"status": true,
 				"code":   code,
@@ -96,7 +105,7 @@ func AnonymousGetAPI(c *gin.Context) {
 	}
 
 	cache := c.MustGet("cache").(*redis.Client)
-	res := cache.Get(c, code)
+	res := cache.Get(c, fmt.Sprintf("note:anymous:%s", code))
 	if res.Err() != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
@@ -104,14 +113,24 @@ func AnonymousGetAPI(c *gin.Context) {
 		})
 		return
 	}
-	var form NoteForm
-	if err := res.Scan(&form); err != nil {
+
+	if res.Err() != nil || len(res.Val()) == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "code not found",
 		})
 		return
 	}
+
+	var form NoteForm
+	if err := json.Unmarshal([]byte(res.Val()), &form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "internal error",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
 		"title":  form.Title,
