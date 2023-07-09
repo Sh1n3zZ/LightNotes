@@ -9,8 +9,18 @@ import Notification from "@/components/Notification.vue";
 const loading = ref(false);
 const form = reactive({
   title: "",
-  content: "",
+  body: "",
 });
+
+watch(window, val => {
+  if (!val.send) {
+    code.value = "";
+    form.title = "";
+    form.body = "";
+  }
+});
+
+const code = ref("");
 const message = ref("");
 watch(message, (val) => {
   if (!val) return;
@@ -20,13 +30,22 @@ watch(message, (val) => {
 async function send() {
   if (loading.value) return;
   loading.value = true;
-  if (!form.title || !form.content) {
+  if (!form.title || !form.body) {
     message.value = "标题和内容不能为空！";
     loading.value = false;
     return;
   }
+
   try {
-    const data = await axios.post("/anonymous/send", form);
+    const data = (await axios.post("/anonymous/send", form)).data;
+    if (data.status) {
+      code.value = data.code;
+      message.value = "发送成功！";
+      form.title = "";
+      form.body = "";
+    } else {
+      message.value = "发送失败！请稍后重试";
+    }
   } catch (e) {
     message.value = "发送失败！请检查您的网络环境";
   }
@@ -40,14 +59,20 @@ async function send() {
     {{ message }}
   </Notification>
   <PopupWindow title="发送" v-model="window.send">
-    <div class="form">
+    <div class="form" v-if="code">
+      <span class="message">您的接签码为：</span>
+      <div class="code">
+        <div v-for="(value, index) in code" :key="index" :style="{'animation-delay': index * 100 + 'ms'}">{{ value }}</div>
+      </div>
+    </div>
+    <div class="form" v-else>
       <div class="column">
         <div class="row">
           <input type="text" placeholder="请输入标题" maxlength="120" v-model="form.title" />
         </div>
         <div class="divider" style="background: rgb(50,50,50)" />
         <div class="row textarea">
-          <textarea placeholder="请输入便签内容" maxlength="10240" v-model="form.content"></textarea>
+          <textarea placeholder="请输入便签内容" maxlength="10240" v-model="form.body"></textarea>
         </div>
       </div>
       <button class="button" @click="send">
@@ -69,6 +94,34 @@ async function send() {
 
 .form .row {
   width: 100%;
+}
+
+.code {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.code div {
+  height: max-content;
+  font-size: 36px;
+  padding: 2px 12px;
+  margin: 4px;
+  opacity: 0;
+  color: rgb(94, 176, 253);
+  background: rgb(40,40,40);
+  border-radius: 4px;
+  animation: FadeInAnimation 1s ease-in-out forwards;
+}
+
+.message {
+  font-size: 24px;
+  margin: 42px !important;
+  text-align: center;
+  animation: FadeInAnimation 1s ease-in-out;
 }
 
 .loading {
@@ -134,6 +187,24 @@ async function send() {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes FadeInAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .code {
+    flex-wrap: wrap;
+  }
+  .code div {
+    font-size: 26px;
   }
 }
 </style>

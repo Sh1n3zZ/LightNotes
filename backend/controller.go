@@ -71,10 +71,11 @@ func AnonymousSendAPI(c *gin.Context) {
 
 	cache := c.MustGet("cache").(*redis.Client)
 	for {
-		code := fmt.Sprintf("note:anymous:%s", GenerateCode(8))
-		res := cache.Get(c, code)
+		code := GenerateCode(8)
+		key := fmt.Sprintf("note:anymous:%s", GenerateCode(8))
+		res := cache.Get(c, key)
 		if res.Err() != nil && len(res.Val()) == 0 {
-			cache.Set(c, code, form, time.Hour*24)
+			cache.Set(c, key, form, time.Hour*24)
 			c.JSON(http.StatusOK, gin.H{
 				"status": true,
 				"code":   code,
