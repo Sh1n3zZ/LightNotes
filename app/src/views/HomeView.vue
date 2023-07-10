@@ -11,7 +11,7 @@ import { api } from "@/assets/script/note";
 
 const total = ref(0);
 const page = ref(1);
-const data = ref([]);
+const data = ref<api.Note[]>([]);
 
 async function getNotes() {
   const resp = await axios.get(`/user/list?page=${page.value}`);

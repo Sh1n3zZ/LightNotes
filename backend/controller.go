@@ -23,9 +23,10 @@ type NoteForm struct {
 }
 
 type Note struct {
-	ID    int64  `json:"id"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	ID        int64     `json:"id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 func LoginAPI(c *gin.Context) {
@@ -230,8 +231,8 @@ func UserGetAPI(c *gin.Context) {
 		return
 	}
 
-	var title, body string
-	if err := db.QueryRow("SELECT title, content FROM notes WHERE user_id = ? AND id = ?", id, noteID).Scan(&title, &body); err != nil {
+	var note Note
+	if err := db.QueryRow("SELECT id, title, content, created_at FROM notes WHERE user_id = ? AND id = ?", id, noteID).Scan(&note.ID, &note.Title, &note.Body, &note.CreatedAt); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "note not found",
@@ -241,9 +242,7 @@ func UserGetAPI(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
-		"id":     noteID,
-		"title":  title,
-		"body":   body,
+		"note":   note,
 	})
 }
 
@@ -395,7 +394,7 @@ func UserListAPI(c *gin.Context) {
 		return
 	}
 
-	rows, err := db.Query("SELECT id, title, content FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
+	rows, err := db.Query("SELECT id, title, content, created_at FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
@@ -409,7 +408,7 @@ func UserListAPI(c *gin.Context) {
 	notes := make([]Note, 0)
 	for rows.Next() {
 		var note Note
-		if err := rows.Scan(&note.ID, &note.Title, &note.Body); err != nil {
+		if err := rows.Scan(&note.ID, &note.Title, &note.Body, &note.CreatedAt); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"status":  false,
 				"error":   "internal error",

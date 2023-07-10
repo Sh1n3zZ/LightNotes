@@ -2,13 +2,13 @@ import axios from "axios";
 
 export namespace api {
   type Param = number | string;
-  type Note = {
+  export type Note = {
     id: number;
     title: string;
     body: string;
   }
 
-  type PaginationResponse = {
+  export type PaginationResponse = {
     status: boolean;
     total: number;
     page: number;
@@ -29,7 +29,7 @@ export namespace api {
 
   export async function getNoteById(id: Param): Promise<Note | undefined> {
     const data = await axios.get(`/user/get?id=${id}`);
-    if (data.data.status) return data.data as Note;
+    if (data.data.status) return data.data.note as Note;
   }
 
   export async function saveNoteById(id: Param, title: string, body: string): Promise<boolean> {

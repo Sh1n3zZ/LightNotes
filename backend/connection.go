@@ -54,6 +54,7 @@ func CreateNoteTable(db *sql.DB) {
 		  title VARCHAR(120) NOT NULL,
 		  content TEXT(40000) NOT NULL,
 		  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		  FOREIGN KEY (user_id) REFERENCES notes.auth(id)
 		);
 	`)
