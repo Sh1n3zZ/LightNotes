@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import { token } from "@/assets/script/auth";
+import { auth, token } from "@/assets/script/auth";
 import router from "@/router";
 import Error from "@/components/icons/error.vue";
 
@@ -16,6 +16,7 @@ onMounted(async () => {
       data = res.data;
     if (data.status) {
       token.value = data.token;
+      auth.value = true;
       message.value = "登录成功！正在跳转中...";
       await router.push("/home");
     } else {

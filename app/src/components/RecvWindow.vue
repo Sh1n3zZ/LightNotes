@@ -14,6 +14,7 @@ const form = reactive({
 
 watch(window, val => {
   if (!val.receive) {
+    get.value = false;
     code.value = "";
     form.title = "";
     form.body = "";
@@ -70,7 +71,7 @@ async function recv() {
         <span v-else>接收</span>
       </button>
     </div>
-    <div class="form" v-else>
+    <div class="form result" v-else>
       <div class="column">
         <div class="row">
           <input type="text" placeholder="标题" v-model="form.title" readonly />
@@ -91,6 +92,19 @@ async function recv() {
   align-items: center;
   width: 100%;
   justify-content: center;
+}
+
+.form.result {
+  height: calc(100% - 26px);
+  animation: FadeInAnimation 1s ease-in-out;
+}
+
+.divider {
+  margin: 2px 0;
+}
+
+.form.result .column {
+  height: 100%;
 }
 
 .form .row {
@@ -125,6 +139,11 @@ async function recv() {
 
 .form .row.textarea {
   flex-direction: column;
+  height: 100%;
+}
+
+.form .row.textarea textarea {
+  height: 100%;
 }
 
 .form span {
@@ -135,7 +154,7 @@ async function recv() {
 .form input {
   height: 38px;
   font-size: 16px;
-  margin: 0 8px;
+  margin: 10px 8px 0 !important;
 }
 
 .form textarea {

@@ -68,7 +68,7 @@ func ParseToken(c *gin.Context, token string) *User {
 		return nil
 	}
 	if claims, ok := instance.Claims.(jwt.MapClaims); ok && instance.Valid {
-		if claims["exp"].(int64) < time.Now().Unix() {
+		if int64(claims["exp"].(float64)) < time.Now().Unix() {
 			return nil
 		}
 		user := &User{

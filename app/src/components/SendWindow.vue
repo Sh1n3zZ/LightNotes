@@ -105,6 +105,10 @@ async function copy() {
   justify-content: center;
 }
 
+.divider {
+  margin: 2px 0;
+}
+
 .form .row {
   width: 100%;
 }
@@ -157,7 +161,7 @@ async function copy() {
 .form input {
   height: 38px;
   font-size: 16px;
-  margin: 0 8px;
+  margin: 10px 8px 0 !important;
 }
 
 .form textarea {

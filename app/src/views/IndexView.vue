@@ -67,7 +67,7 @@ function register() {
   <SendWindow v-model="window.send"> </SendWindow>
   <RecvWindow v-model="window.receive"> </RecvWindow>
   <footer>
-    <span class="copyright">© 2023 LightXi Cloud</span>
+    <span class="copyright">© 2023 <a href="https://lightxi.com" target="_blank">LightXi Cloud</a></span>
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
       <img src="/gov.webp" alt="icp" />
       <span>粤ICP备2023066011号-1</span>
@@ -234,6 +234,15 @@ footer .copyright {
   transition: 0.25s;
   margin-left: auto;
   user-select: none;
+}
+
+footer .copyright a {
+  color: rgba(255, 255, 255, 0.6);
+  background: none;
+}
+
+footer .copyright a:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .icp {

@@ -138,6 +138,13 @@ func AnonymousGetAPI(c *gin.Context) {
 	})
 }
 
+func UserStateAPI(c *gin.Context) {
+	username := c.MustGet("user").(string)
+	c.JSON(http.StatusOK, gin.H{
+		"status": len(username) != 0,
+	})
+}
+
 func UserSaveAPI(c *gin.Context) {
 	var form NoteForm
 	if err := c.ShouldBind(&form); err != nil {
