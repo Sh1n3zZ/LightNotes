@@ -19,8 +19,6 @@ Keep small and large matters to heart.A lightweight note application that suppor
 <img src="https://img.shields.io/github/actions/workflow/status/Sh1n3zZ/LightNotes/build.yaml?branch=main" alt="GitHub Test Workflow"></a>
 </div>
 
-![Screenshot](https://lightxi.com/homepage.png)
-
 # 项目目录
 ```
 LightNotes/
