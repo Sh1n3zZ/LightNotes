@@ -13,7 +13,7 @@ const form = reactive({
   body: "",
 });
 
-watch(window, val => {
+watch(window, (val) => {
   if (!val.send) {
     code.value = "";
     form.title = "";
@@ -72,7 +72,13 @@ async function copy() {
     <div class="form" v-if="code">
       <span class="message">您的接签码为：</span>
       <div class="code">
-        <div v-for="(value, index) in code" :key="index" :style="{'animation-delay': index * 100 + 'ms'}">{{ value }}</div>
+        <div
+          v-for="(value, index) in code"
+          :key="index"
+          :style="{ 'animation-delay': index * 100 + 'ms' }"
+        >
+          {{ value }}
+        </div>
       </div>
       <button class="button copy" @click="copy">
         <span>复制</span>
@@ -81,11 +87,20 @@ async function copy() {
     <div class="form" v-else>
       <div class="column">
         <div class="row">
-          <input type="text" placeholder="请输入标题" maxlength="120" v-model="form.title" />
+          <input
+            type="text"
+            placeholder="请输入标题"
+            maxlength="120"
+            v-model="form.title"
+          />
         </div>
-        <div class="divider" style="background: rgb(50,50,50)" />
+        <div class="divider" style="background: rgb(50, 50, 50)" />
         <div class="row textarea">
-          <textarea placeholder="请输入便签内容" maxlength="10240" v-model="form.body" />
+          <textarea
+            placeholder="请输入便签内容"
+            maxlength="10240"
+            v-model="form.body"
+          />
         </div>
       </div>
       <button class="button" @click="send">
@@ -129,7 +144,7 @@ async function copy() {
   margin: 4px;
   opacity: 0;
   color: rgb(94, 176, 253);
-  background: rgb(40,40,40);
+  background: rgb(40, 40, 40);
   border-radius: 4px;
   animation: FadeInAnimation 1s ease-in-out forwards;
 }
@@ -187,7 +202,7 @@ async function copy() {
   background: rgb(40, 40, 40);
   color: #fff;
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .button.copy {

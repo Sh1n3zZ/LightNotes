@@ -1,7 +1,7 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 
-export const auth = ref<boolean>(false);
+export const auth = ref<boolean | undefined>(undefined);
 export const token = ref(localStorage.getItem("token") || "");
 
 watch(token, () => {
@@ -9,12 +9,15 @@ watch(token, () => {
   axios.defaults.headers.common["Authorization"] = token.value;
 });
 
-if (token.value) {
-  window.addEventListener('load', () => {
-    axios.post("/user/state")
-      .then(resp => {
-        if (resp.data.state === "ok")
-          auth.value = Boolean(resp.data.status);
-      })
-  })
+
+export async function awaitUtilSetup(): Promise<any> {
+  if (auth.value !== undefined) return;
+  if (!token.value) return (auth.value = false);
+  try {
+    const resp = await axios.post("/user/state");
+    auth.value = resp.data.status;
+  } catch {
+    auth.value = false;
+  }
+  return;
 }

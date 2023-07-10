@@ -5,6 +5,8 @@ import { reactive } from "vue";
 import { window } from "@/assets/script/shared";
 import SendWindow from "@/components/SendWindow.vue";
 import RecvWindow from "@/components/RecvWindow.vue";
+import { auth } from "@/assets/script/auth";
+import router from "@/router";
 
 const active = reactive({
   anonymous: false,
@@ -18,6 +20,7 @@ function toggleAnonymous() {
 }
 
 function toggleUser() {
+  if (auth.value) return router.push("/home");
   if (active.user) return (active.user = false);
   setTimeout(() => (active.user = true), 100);
   active.anonymous = false;
@@ -67,7 +70,10 @@ function register() {
   <SendWindow v-model="window.send"> </SendWindow>
   <RecvWindow v-model="window.receive"> </RecvWindow>
   <footer>
-    <span class="copyright">© 2023 <a href="https://lightxi.com" target="_blank">LightXi Cloud</a></span>
+    <span class="copyright"
+      >© 2023
+      <a href="https://lightxi.com" target="_blank">LightXi Cloud</a></span
+    >
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
       <img src="/gov.webp" alt="icp" />
       <span>粤ICP备2023066011号-1</span>

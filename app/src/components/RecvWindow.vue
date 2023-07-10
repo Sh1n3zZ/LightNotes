@@ -12,7 +12,7 @@ const form = reactive({
   body: "",
 });
 
-watch(window, val => {
+watch(window, (val) => {
   if (!val.receive) {
     get.value = false;
     code.value = "";
@@ -76,7 +76,7 @@ async function recv() {
         <div class="row">
           <input type="text" placeholder="标题" v-model="form.title" readonly />
         </div>
-        <div class="divider" style="background: rgb(50,50,50)" />
+        <div class="divider" style="background: rgb(50, 50, 50)" />
         <div class="row textarea">
           <textarea placeholder="便签内容" v-model="form.body" readonly />
         </div>
@@ -180,7 +180,7 @@ async function recv() {
   background: rgb(40, 40, 40);
   color: #fff;
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .button span {

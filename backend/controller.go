@@ -142,6 +142,7 @@ func UserStateAPI(c *gin.Context) {
 	username := c.MustGet("user").(string)
 	c.JSON(http.StatusOK, gin.H{
 		"status": len(username) != 0,
+		"user":   username,
 	})
 }
 
@@ -344,8 +345,18 @@ func UserListAPI(c *gin.Context) {
 	}
 
 	db := c.MustGet("db").(*sql.DB)
+
+	var id int
+	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", username).Scan(&id); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "user not found",
+		})
+		return
+	}
+
 	var total int
-	if err := db.QueryRow("SELECT COUNT(*) FROM notes").Scan(&total); err != nil {
+	if err := db.QueryRow("SELECT COUNT(*) FROM notes WHERE id = ?", id).Scan(&total); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "internal error",
@@ -363,20 +374,12 @@ func UserListAPI(c *gin.Context) {
 		page = total
 	}
 
-	var id int
-	if err := db.QueryRow("SELECT id FROM auth WHERE username = ?", username).Scan(&id); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"status": false,
-			"error":  "user not found",
-		})
-		return
-	}
-
 	rows, err := db.Query("SELECT id, title, content FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"status": false,
-			"error":  "internal error",
+			"status":  false,
+			"error":   "internal error",
+			"message": err.Error(),
 		})
 		return
 	}
@@ -387,8 +390,9 @@ func UserListAPI(c *gin.Context) {
 		var note Note
 		if err := rows.Scan(&note.ID, &note.Title, &note.Body); err != nil {
 			c.JSON(http.StatusOK, gin.H{
-				"status": false,
-				"error":  "internal error",
+				"status":  false,
+				"error":   "internal error",
+				"message": err.Error(),
 			})
 			return
 		}
