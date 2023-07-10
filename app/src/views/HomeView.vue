@@ -28,6 +28,8 @@ const text = ref("");
 const title = ref("");
 const mobile = ref(document.body.clientWidth < 620);
 const sync = ref(true);
+const syncTimer = ref<Date>(new Date());
+const syncText = ref("刚刚");
 
 let timer: number;
 watch(text, () => {
@@ -38,6 +40,7 @@ watch(text, () => {
   clearTimeout(timer);
   timer = Number(setTimeout(async () => {
     await api.saveNoteById(id.value, title.value, text.value);
+    syncTimer.value = new Date();
     sync.value = true;
   }, 3000));
 })
@@ -52,6 +55,7 @@ async function activeEditor(_id: number) {
   id.value = _id;
   const note = await api.getNoteById(_id);
   if (note) {
+    syncTimer.value = new Date();
     text.value = note.body;
     title.value = note.title;
   }
@@ -59,22 +63,30 @@ async function activeEditor(_id: number) {
 
 async function closeEditor() {
   editor.value = false;
-  await api.saveNoteById(id.value, title.value, text.value);
   sync.value = true;
+  api.saveNoteById(id.value, title.value, text.value).then(r => 0);
+
+  const idx = api.searchNotes(id.value, data.value);
+  data.value[idx].title = title.value;
+  data.value[idx].body = text.value;
   id.value = 0;
   text.value = "";
   title.value = "";
 }
+
+setInterval(() => {
+  syncText.value = formatDate(syncTimer.value, false);
+}, 1000);
 </script>
 
 <template>
-  <div class="card" v-if="editor">
+  <div class="card editor" v-if="editor">
     <div class="header">
       <arrow class="arrow" @click="closeEditor" /><div class="grow" />
       <div class="title">{{ title }}</div><div class="grow" />
       <div class="user">
         <div class="status" :class="{'sync': sync}" />
-        <span class="name">{{ username }}</span>
+        <span class="name">{{ syncText }}</span>
       </div>
     </div>
     <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
@@ -92,7 +104,7 @@ async function closeEditor() {
       <div class="item" v-for="item in data" @click="activeEditor(item.id)">
         <div class="header">
           <div class="title">{{ item.title }}</div><div class="grow" />
-          <div class="time">{{ formatDate(item.created_at) }}</div>
+          <div class="time">{{ formatDate(item.updated_at) }}</div>
         </div>
         <div class="description">{{ item.body }}</div>
       </div>
@@ -117,6 +129,10 @@ async function closeEditor() {
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
+}
+
+.card.editor {
+  width: min(1020px, 90%);
 }
 
 .grow {

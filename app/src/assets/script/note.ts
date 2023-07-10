@@ -6,7 +6,7 @@ export namespace api {
     id: number;
     title: string;
     body: string;
-    created_at: string;
+    updated_at: string;
   }
 
   export type PaginationResponse = {
@@ -41,5 +41,12 @@ export namespace api {
   export async function deleteNoteById(id: Param): Promise<boolean> {
     const data = await axios.post(`/user/delete?id=${id}`);
     return data.data.status;
+  }
+
+  export function searchNotes(id: Param, data: Note[]): number {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id == id) return i;
+    }
+    return -1;
   }
 }

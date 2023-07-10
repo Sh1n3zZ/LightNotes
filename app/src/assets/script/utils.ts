@@ -1,6 +1,6 @@
-export function formatDate(time: string): string {
-  const now = new Date(), date = new Date(time);
-  const diff = (now.getTime() - date.getTime()) / 1000 + 8 * 3600; // second
+export function formatDate(time: string | Date, offset: boolean = true): string {
+  const now = new Date(), date = typeof time == 'string' ? new Date(time) : time;
+  const diff = (now.getTime() - date.getTime()) / 1000 + (offset ? 8 * 3600 : 0); // second
 
   if (diff < 0) {
     return '无';
