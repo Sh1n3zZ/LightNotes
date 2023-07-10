@@ -30,10 +30,10 @@ watch(text, () => {
   title.value = data.replace(/^#*|#+$/g, "");
   sync.value = false;
   clearTimeout(timer);
-  timer = setTimeout(async () => {
+  timer = Number(setTimeout(async () => {
 
     sync.value = true;
-  }, 3000);
+  }, 3000));
 })
 </script>
 
