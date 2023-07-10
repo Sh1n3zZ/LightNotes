@@ -7,6 +7,7 @@ import "md-editor-v3/lib/style.css";
 import { tools } from "@/assets/script/config";
 import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
+import { api } from "@/assets/script/note";
 
 const total = ref(0);
 const page = ref(1);
@@ -14,11 +15,13 @@ const data = ref([]);
 
 async function getNotes() {
   const resp = await axios.get(`/user/list?page=${page.value}`);
-  const res = resp.data;
+  const res = data.value = resp.data.notes;
   total.value = res.total;
 }
 getNotes();
 
+const editor = ref(false);
+const id = ref(0);
 const text = ref("");
 const title = ref("");
 const mobile = ref(document.body.clientWidth < 620);
@@ -29,16 +32,17 @@ watch(text, () => {
   const data = text.value.split("\n")[0];
   title.value = data.replace(/^#*|#+$/g, "");
   sync.value = false;
+
   clearTimeout(timer);
   timer = Number(setTimeout(async () => {
-
+    await api.saveNoteById(id.value, title.value, text.value);
     sync.value = true;
   }, 3000));
 })
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" v-if="editor">
     <div class="header">
       <arrow class="arrow" /><div class="grow" />
       <div class="title">{{ title }}</div><div class="grow" />
@@ -49,6 +53,21 @@ watch(text, () => {
     </div>
     <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
   </div>
+  <div class="card" v-else>
+    <div class="header">
+      <div class="title">Notes</div><div class="grow" />
+      <div class="user">
+        <div class="status sync" />
+        {{ username }}
+      </div>
+    </div>
+    <div class="list">
+      <div class="item" v-for="item in data">
+        <div class="title">{{ item.title }}</div>
+        <div class="description">{{ item.body }}</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -57,7 +76,7 @@ watch(text, () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(1020px, 90%);
+  width: min(620px, 90%);
   max-width: 90%;
   height: max-content;
   min-height: 80vh;
@@ -72,6 +91,43 @@ watch(text, () => {
 
 .grow {
   flex-grow: 1;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: max-content;
+  padding: 8px 32px;
+  margin: 6px 4px;
+  border-radius: 6px;
+  background: rgb(40,40,40);
+  cursor: pointer;
+  transition: .5s;
+}
+
+.item .title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ddd;
+  margin: 16px 4px 0;
+  user-select: none;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item .description {
+  font-size: 16px;
+  font-weight: 400;
+  color: #aaa;
+  margin: 0 4px 8px;
+  user-select: none;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header {
