@@ -79,3 +79,18 @@ html, main, body, #app {
   height: 100%;
   overflow: hidden;
 }
+
+.md-editor * {
+  font-family: var(--fonts);
+  color: #eee;
+
+  --md-theme-color: var(--vt-c-white-mute) !important;
+}
+
+.default-theme h1 {
+  margin: 4px;
+}
+
+.default-theme blockquote {
+  border-left: 5px solid #5fa9fd !important;
+}

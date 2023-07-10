@@ -69,9 +69,10 @@ watch(text, () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(720px, 90%);
+  width: min(1020px, 90%);
   max-width: 90%;
   height: max-content;
+  min-height: 80vh;
   overflow: hidden;
   background-color: rgb(30, 30, 30);
   border-radius: 12px;
