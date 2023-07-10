@@ -186,6 +186,16 @@ func UserSaveAPI(c *gin.Context) {
 	_, err := db.Exec("INSERT INTO notes (user_id, title, content) VALUES (?, ?, ?)", id, form.Title, form.Body)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
+			"status":  false,
+			"error":   "internal error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	var noteID int
+	if err := db.QueryRow("SELECT id FROM notes WHERE user_id = ? AND title = ? AND content = ?", id, form.Title, form.Body).Scan(&noteID); err != nil {
+		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "internal error",
 		})
@@ -194,6 +204,7 @@ func UserSaveAPI(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
+		"id":     noteID,
 	})
 }
 
@@ -230,6 +241,7 @@ func UserGetAPI(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
+		"id":     noteID,
 		"title":  title,
 		"body":   body,
 	})

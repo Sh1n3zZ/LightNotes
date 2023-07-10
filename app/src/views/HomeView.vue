@@ -2,9 +2,9 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
-import type { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
+import { tools } from "@/assets/script/config";
 import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 
@@ -17,38 +17,23 @@ async function getNotes() {
   const res = resp.data;
   total.value = res.total;
 }
+getNotes();
 
 const text = ref("");
 const title = ref("");
 const mobile = ref(document.body.clientWidth < 620);
-let tools: ToolbarNames[] = [
-  'save',
-  'preview',
-  'revoke',
-  'next',
-  '-',
-  'bold',
-  'underline',
-  'italic',
-  '-',
-  'strikeThrough',
-  'title',
-  'sub',
-  'sup',
-  'quote',
-  'unorderedList',
-  'orderedList',
-  'task',
-  '-',
-  'codeRow',
-  'code',
-  'link',
-]
-getNotes();
+const sync = ref(true);
 
+let timer: number;
 watch(text, () => {
   const data = text.value.split("\n")[0];
   title.value = data.replace(/^#*|#+$/g, "");
+  sync.value = false;
+  clearTimeout(timer);
+  timer = setTimeout(async () => {
+
+    sync.value = true;
+  }, 3000);
 })
 </script>
 
@@ -57,7 +42,10 @@ watch(text, () => {
     <div class="header">
       <arrow class="arrow" /><div class="grow" />
       <div class="title">{{ title }}</div><div class="grow" />
-      <div class="user">{{ username }}</div>
+      <div class="user">
+        <div class="status" :class="{'sync': sync}" />
+        {{ username }}
+      </div>
     </div>
     <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
   </div>
@@ -97,6 +85,7 @@ watch(text, () => {
   font-weight: 600;
   color: #ddd;
   margin: 4px;
+  user-select: none;
   transform: translateY(-12px);
   max-width: 60%;
   overflow: hidden;
@@ -126,6 +115,22 @@ watch(text, () => {
   float: right;
   height: max-content;
   transform: translateY(-12px);
+}
+
+.status {
+  width: 8px;
+  height: 8px;
+  margin: 9px 4px;
+  transform: translateX(-2px);
+  border-radius: 50%;
+  background: #eac121;
+  display: inline-block;
+  float: left;
+  transition: .5s;
+}
+
+.status.sync {
+  background: #0fab02;
 }
 
 @media (max-width: 520px) {

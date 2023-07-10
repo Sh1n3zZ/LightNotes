@@ -50,7 +50,7 @@ func CreateNoteTable(db *sql.DB) {
 	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS notes (
 		  id INT PRIMARY KEY AUTO_INCREMENT,
-		  user_id INT UNIQUE,
+		  user_id INT NOT NULL,
 		  title VARCHAR(120) NOT NULL,
 		  content TEXT(40000) NOT NULL,
 		  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
