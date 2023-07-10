@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
+import type { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import Arrow from "@/components/icons/arrow.vue";
 
@@ -21,7 +22,7 @@ async function getNotes() {
 
 const text = ref("");
 const mobile = ref(document.body.clientWidth < 620);
-let tools = [
+let tools: ToolbarNames[] = [
   'save',
   'preview',
   'revoke',
@@ -43,7 +44,7 @@ let tools = [
   'codeRow',
   'code',
   'link',
-];
+]
 getNotes();
 </script>
 
