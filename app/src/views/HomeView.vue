@@ -9,6 +9,7 @@ import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 import { api } from "@/assets/script/note";
 import Plus from "@/components/icons/plus.vue";
+import { formatDate } from "@/assets/script/utils";
 
 const total = ref(0);
 const page = ref(1);
@@ -43,14 +44,33 @@ watch(text, () => {
 
 async function create() {
   const id = await api.newNote();
-  console.log(id);
+  if (id !== undefined) await activeEditor(id);
+}
+
+async function activeEditor(_id: number) {
+  editor.value = true;
+  id.value = _id;
+  const note = await api.getNoteById(_id);
+  if (note) {
+    text.value = note.body;
+    title.value = note.title;
+  }
+}
+
+async function closeEditor() {
+  editor.value = false;
+  await api.saveNoteById(id.value, title.value, text.value);
+  sync.value = true;
+  id.value = 0;
+  text.value = "";
+  title.value = "";
 }
 </script>
 
 <template>
   <div class="card" v-if="editor">
     <div class="header">
-      <arrow class="arrow" /><div class="grow" />
+      <arrow class="arrow" @click="closeEditor" /><div class="grow" />
       <div class="title">{{ title }}</div><div class="grow" />
       <div class="user">
         <div class="status" :class="{'sync': sync}" />
@@ -69,8 +89,11 @@ async function create() {
       </div>
     </div>
     <div class="list">
-      <div class="item" v-for="item in data">
-        <div class="title">{{ item.title }}</div>
+      <div class="item" v-for="item in data" @click="activeEditor(item.id)">
+        <div class="header">
+          <div class="title">{{ item.title }}</div><div class="grow" />
+          <div class="time">{{ formatDate(item.created_at) }}</div>
+        </div>
         <div class="description">{{ item.body }}</div>
       </div>
     </div>
@@ -151,6 +174,18 @@ async function create() {
   user-select: none;
   transform: translateY(-12px);
   max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  font-size: 16px;
+  font-weight: 400;
+  color: #aaa;
+  margin: 8px 4px 4px;
+  user-select: none;
+  max-width: 40%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

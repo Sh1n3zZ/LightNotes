@@ -1,10 +1,5 @@
 import axios from "axios";
 
-function parseTime(instance: api.Note): api.Note {
-  const data = String.fromCharCode.apply(null, instance.created_at);
-  return instance
-}
-
 export namespace api {
   type Param = number | string;
   export type Note = {
