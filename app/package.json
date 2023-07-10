@@ -14,9 +14,11 @@
     "prettier": "prettier --write \"src/**/*.vue\" \"./**/*.ts\""
   },
   "dependencies": {
+    "@vavt/md-editor-extension": "^3.0.0",
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
-    "vue": "^3.2.45",
+    "md-editor-v3": "^4.2.1",
+    "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

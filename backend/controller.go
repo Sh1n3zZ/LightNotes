@@ -380,6 +380,7 @@ func UserListAPI(c *gin.Context) {
 			"prev_page": page-1 > 0,
 			"notes":     make([]Note, 0),
 		})
+		return
 	}
 
 	rows, err := db.Query("SELECT id, title, content FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
