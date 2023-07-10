@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 func Sha2Encrypt(raw string) string {
@@ -134,4 +135,12 @@ func GenerateChar(length int) string {
 		result[i] = charset[rand.Intn(len(charset))]
 	}
 	return string(result)
+}
+
+func ConvertTime(t []uint8) *time.Time {
+	val, err := time.Parse("2006-01-02 15:04:05", string(t))
+	if err != nil {
+		return nil
+	}
+	return &val
 }

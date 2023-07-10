@@ -23,10 +23,10 @@ type NoteForm struct {
 }
 
 type Note struct {
-	ID        int64   `json:"id"`
-	Title     string  `json:"title"`
-	Body      string  `json:"body"`
-	CreatedAt []uint8 `json:"created_at"`
+	ID        int64      `json:"id"`
+	Title     string     `json:"title"`
+	Body      string     `json:"body"`
+	CreatedAt *time.Time `json:"created_at"`
 }
 
 func LoginAPI(c *gin.Context) {
@@ -232,13 +232,15 @@ func UserGetAPI(c *gin.Context) {
 	}
 
 	var note Note
-	if err := db.QueryRow("SELECT id, title, content, created_at FROM notes WHERE user_id = ? AND id = ?", id, noteID).Scan(&note.ID, &note.Title, &note.Body, &note.CreatedAt); err != nil {
+	var stamp []uint8
+	if err := db.QueryRow("SELECT id, title, content, created_at FROM notes WHERE user_id = ? AND id = ?", id, noteID).Scan(&note.ID, &note.Title, &note.Body, &stamp); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "note not found",
 		})
 		return
 	}
+	note.CreatedAt = ConvertTime(stamp)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
@@ -408,7 +410,8 @@ func UserListAPI(c *gin.Context) {
 	notes := make([]Note, 0)
 	for rows.Next() {
 		var note Note
-		if err := rows.Scan(&note.ID, &note.Title, &note.Body, &note.CreatedAt); err != nil {
+		var stamp []uint8
+		if err := rows.Scan(&note.ID, &note.Title, &note.Body, &stamp); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"status":  false,
 				"error":   "internal error",
@@ -416,6 +419,7 @@ func UserListAPI(c *gin.Context) {
 			})
 			return
 		}
+		note.CreatedAt = ConvertTime(stamp)
 		notes = append(notes, note)
 	}
 
