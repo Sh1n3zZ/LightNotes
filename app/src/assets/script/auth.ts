@@ -9,7 +9,6 @@ watch(token, () => {
   axios.defaults.headers.common["Authorization"] = token.value;
 });
 
-
 export async function awaitUtilSetup(): Promise<any> {
   if (auth.value !== undefined) return;
   if (!token.value) return (auth.value = false);

@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@vavt/md-editor-extension": "^3.0.0",
-    "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "md-editor-v3": "^4.2.1",
     "vue": "^3.2.47",
@@ -36,7 +35,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "typescript": "~4.7.4",
-    "vite": "^4.0.0",
+    "vite": "4.0.0-alpha.0",
     "vite-plugin-html": "^3.2.0",
     "vitest": "^0.25.6",
     "vue-tsc": "^1.0.12"

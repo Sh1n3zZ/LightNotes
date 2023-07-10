@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
 import type { ToolbarNames } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
+
+import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 
 const total = ref(0);
-const username = ref("");
 const page = ref(1);
 const data = ref([]);
-axios.post('/user/state').then(res => {
-  if (res.data.status) username.value = res.data.user;
-});
 
 async function getNotes() {
   const resp = await axios.get(`/user/list?page=${page.value}`);
@@ -21,6 +19,7 @@ async function getNotes() {
 }
 
 const text = ref("");
+const title = ref("");
 const mobile = ref(document.body.clientWidth < 620);
 let tools: ToolbarNames[] = [
   'save',
@@ -39,24 +38,28 @@ let tools: ToolbarNames[] = [
   'quote',
   'unorderedList',
   'orderedList',
-  'task', // ^2.4.0
+  'task',
   '-',
   'codeRow',
   'code',
   'link',
 ]
 getNotes();
+
+watch(text, () => {
+  const data = text.value.split("\n")[0];
+  title.value = data.replace(/^#*|#+$/g, "");
+})
 </script>
 
 <template>
   <div class="card">
     <div class="header">
-      <arrow class="arrow" />
-      <div class="user">
-        {{ username }}
-      </div>
+      <arrow class="arrow" /><div class="grow" />
+      <div class="title">{{ title }}</div><div class="grow" />
+      <div class="user">{{ username }}</div>
     </div>
-    <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" code-theme="github" />
+    <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
   </div>
 </template>
 
@@ -78,8 +81,26 @@ getNotes();
   z-index: 1;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 .header {
+  display: flex;
+  flex-direction: row;
   margin-top: 4px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ddd;
+  margin: 4px;
+  transform: translateY(-12px);
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .arrow {
@@ -92,15 +113,25 @@ getNotes();
   background: rgb(40,40,40);
   border-radius: 50%;
   transform: translateY(-6px);
+  flex-shrink: 0;
 }
 
 .user {
   border-radius: 4px;
   padding: 4px 8px;
   background: rgb(40,40,40);
-  margin: 4px;
+  margin: 6px 4px;
   user-select: none;
   float: right;
+  height: max-content;
   transform: translateY(-12px);
+}
+
+@media (max-width: 520px) {
+  .title {
+    height: max-content;
+    max-width: 40%;
+    text-overflow: fade;
+  }
 }
 </style>
