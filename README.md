@@ -11,4 +11,30 @@ Keep small and large matters to heart.A lightweight note application that suppor
 
 [![Code Stats](https://stats.deeptrain.net/repo/Sh1n3zZ/LightNotes/?theme=light)](https://notes.lightxi.com)
 
+<a target="_blank" href="https://github.com/Sh1n3zZ/LightNotes">
+<img src="https://img.shields.io/github/stars/Sh1n3zZ/LightNotes" /></a> 
+<a target="_blank" href="https://github.com/Sh1n3zZ/LightNotes">
+<img src="https://img.shields.io/github/last-commit/Sh1n3zZ/LightNotes" /></a>
+<a href="https://github.com/Sh1n3zZ/LightNotes/actions/workflows/build.yaml">
+<img src="https://img.shields.io/github/actions/workflow/status/Sh1n3zZ/LightNotes/build.yaml?branch=main" alt="GitHub Test Workflow"></a>
 </div>
+
+![Screenshot](https://lightxi.com/homepage.png)
+
+# 项目目录
+```
+LightNotes/
+├── app/                       # 项目前端程序
+│   ├── public/                # 前端资源文件
+│   └── src/                   # 存放源代码
+│
+├── backend/                   # 项目后端程序
+│   └── middleware/            # 项目中间件
+│
+├── serverless/                # 开始时用php实现的简易版本
+│   ├── backend/               # 用于处理登录/注册的后端程序
+│   └── database/              # 数据库连接配置
+│
+├── LICENSE                    # 项目许可证
+└── README.md                  # 项目说明文件
+```
