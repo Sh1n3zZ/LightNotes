@@ -358,8 +358,9 @@ func UserListAPI(c *gin.Context) {
 	var total int
 	if err := db.QueryRow("SELECT COUNT(*) FROM notes WHERE id = ?", id).Scan(&total); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"status": false,
-			"error":  "internal error",
+			"status":  false,
+			"error":   "internal error",
+			"message": err.Error(),
 		})
 		return
 	}
@@ -370,8 +371,15 @@ func UserListAPI(c *gin.Context) {
 		total = total / PaginationSize
 	}
 
-	if page > total {
-		page = total
+	if page > total || page < 1 {
+		c.JSON(http.StatusOK, gin.H{
+			"status":    true,
+			"total":     total,
+			"page":      page,
+			"next_page": page+1 <= total,
+			"prev_page": page-1 > 0,
+			"notes":     make([]Note, 0),
+		})
 	}
 
 	rows, err := db.Query("SELECT id, title, content FROM notes WHERE user_id = ? ORDER BY id DESC LIMIT ?, ?", id, (page-1)*PaginationSize, PaginationSize)
@@ -404,7 +412,7 @@ func UserListAPI(c *gin.Context) {
 		"total":     total,
 		"page":      page,
 		"next_page": page+1 <= total,
-		"prev_page": page-1 >= 0,
+		"prev_page": page-1 > 0,
 		"notes":     notes,
 	})
 }
