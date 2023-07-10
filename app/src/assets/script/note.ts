@@ -6,6 +6,7 @@ export namespace api {
     id: number;
     title: string;
     body: string;
+    created_at: string;
   }
 
   export type PaginationResponse = {

@@ -8,6 +8,7 @@ import { tools } from "@/assets/script/config";
 import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 import { api } from "@/assets/script/note";
+import Plus from "@/components/icons/plus.vue";
 
 const total = ref(0);
 const page = ref(1);
@@ -39,6 +40,11 @@ watch(text, () => {
     sync.value = true;
   }, 3000));
 })
+
+async function create() {
+  const id = await api.newNote();
+  console.log(id);
+}
 </script>
 
 <template>
@@ -48,7 +54,7 @@ watch(text, () => {
       <div class="title">{{ title }}</div><div class="grow" />
       <div class="user">
         <div class="status" :class="{'sync': sync}" />
-        {{ username }}
+        <span class="name">{{ username }}</span>
       </div>
     </div>
     <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
@@ -56,9 +62,10 @@ watch(text, () => {
   <div class="card" v-else>
     <div class="header">
       <div class="title">Notes</div><div class="grow" />
+      <plus class="new" @click="create" />
       <div class="user">
         <div class="status sync" />
-        {{ username }}
+        <span class="name">{{ username }}</span>
       </div>
     </div>
     <div class="list">
@@ -149,6 +156,19 @@ watch(text, () => {
   white-space: nowrap;
 }
 
+.new {
+  fill: #ddd;
+  padding: 6px;
+  margin: 2px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: rgb(40,40,40);
+  border-radius: 4px;
+  transform: translateY(-6px);
+  flex-shrink: 0;
+}
+
 .arrow {
   fill: #ddd;
   padding: 6px;
@@ -194,6 +214,10 @@ watch(text, () => {
     height: max-content;
     max-width: 40%;
     text-overflow: fade;
+  }
+
+  .user .name {
+    display: none;
   }
 }
 </style>

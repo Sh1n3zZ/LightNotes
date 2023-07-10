@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const PaginationSize = 10
+const PaginationSize = 5
 
 type LoginForm struct {
 	Token string `form:"token" binding:"required"`
@@ -23,10 +23,10 @@ type NoteForm struct {
 }
 
 type Note struct {
-	ID        int64     `json:"id"`
-	Title     string    `json:"title"`
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"created_at"`
+	ID        int64   `json:"id"`
+	Title     string  `json:"title"`
+	Body      string  `json:"body"`
+	CreatedAt []uint8 `json:"created_at"`
 }
 
 func LoginAPI(c *gin.Context) {
@@ -195,7 +195,7 @@ func UserSaveAPI(c *gin.Context) {
 	}
 
 	var noteID int
-	if err := db.QueryRow("SELECT id FROM notes WHERE user_id = ? AND title = ? AND content = ?", id, form.Title, form.Body).Scan(&noteID); err != nil {
+	if err := db.QueryRow("SELECT id FROM notes WHERE user_id = ? AND title = ? AND content = ? ORDER BY created_at DESC LIMIT 1", id, form.Title, form.Body).Scan(&noteID); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "internal error",
