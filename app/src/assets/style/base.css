@@ -94,3 +94,16 @@ html, main, body, #app {
 .default-theme blockquote {
   border-left: 5px solid #5fa9fd !important;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 120, .5);
+  border-radius: 3px;
+}

@@ -369,7 +369,7 @@ func UserListAPI(c *gin.Context) {
 	}
 
 	var total int
-	if err := db.QueryRow("SELECT COUNT(*) FROM notes WHERE id = ?", id).Scan(&total); err != nil {
+	if err := db.QueryRow("SELECT COUNT(*) FROM notes WHERE user_id = ?", id).Scan(&total); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  false,
 			"error":   "internal error",

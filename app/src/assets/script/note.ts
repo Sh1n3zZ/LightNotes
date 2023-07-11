@@ -1,4 +1,6 @@
 import axios from "axios";
+import { ref } from "vue";
+import type { Ref } from "vue";
 
 export namespace api {
   type Param = number | string;
@@ -15,7 +17,7 @@ export namespace api {
     page: number;
     prev_page: boolean;
     next_page: boolean;
-    data: Note[];
+    notes: Note[];
   }
 
   export async function newNote(): Promise<number | undefined> {
@@ -24,7 +26,7 @@ export namespace api {
   }
 
   export async function getNotes(page: Param): Promise<PaginationResponse> {
-    const data = await axios.post(`/user/list?page=${page}`);
+    const data = await axios.get(`/user/list?page=${page}`);
     return data.data as PaginationResponse;
   }
 
@@ -48,5 +50,53 @@ export namespace api {
       if (data[i].id == id) return i;
     }
     return -1;
+  }
+
+  export class NotePagination {
+    public page: Ref<number>;
+    public total: Ref<number>;
+    protected data: Ref<Note[]>;
+    protected end: boolean;
+
+    public constructor() {
+      this.page = ref(1);
+      this.total = ref(0);
+      this.data = ref([]);
+      this.end = false;
+    }
+
+    public getRef(): Ref<Note[]> {
+      return this.data;
+    }
+
+    public async update(): Promise<void> {
+      if (this.end) return;
+      const data = await getNotes(this.page.value);
+      this.total.value = data.total;
+      this.data.value = this.data.value.concat(data.notes);
+      if (data.next_page) {
+        this.page.value++;
+      } else {
+        this.end = true;
+      }
+    }
+
+    public new(id: number): void {
+      this.data.value.unshift({
+        id,
+        title: "新便签",
+        body: "写点什么",
+        updated_at: new Date(Date.now() + 8 * 3600000).toString(),
+      });
+    }
+
+    public save(id: number, title: string, body: string): void {
+      const index = searchNotes(id, this.data.value);
+      if (index != -1) {
+        this.data.value[index].title = title;
+        this.data.value[index].body = body;
+        this.data.value[index].updated_at = new Date(Date.now() + 8 * 3600000).toString();
+      }
+    }
   }
 }

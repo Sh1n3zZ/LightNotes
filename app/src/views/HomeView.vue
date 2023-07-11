@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
@@ -11,16 +11,11 @@ import { api } from "@/assets/script/note";
 import Plus from "@/components/icons/plus.vue";
 import { formatDate } from "@/assets/script/utils";
 
-const total = ref(0);
-const page = ref(1);
-const data = ref<api.Note[]>([]);
+const pagination = new api.NotePagination();
+const data = pagination.getRef();
 
-async function getNotes() {
-  const resp = await axios.get(`/user/list?page=${page.value}`);
-  const res = data.value = resp.data.notes;
-  total.value = res.total;
-}
-getNotes();
+
+pagination.update();
 
 const editor = ref(false);
 const id = ref(0);
@@ -30,6 +25,8 @@ const mobile = ref(document.body.clientWidth < 620);
 const sync = ref(true);
 const syncTimer = ref<Date>(new Date());
 const syncText = ref("刚刚");
+
+const list = ref<HTMLElement>();
 
 let timer: number;
 watch(text, () => {
@@ -42,12 +39,25 @@ watch(text, () => {
     await api.saveNoteById(id.value, title.value, text.value);
     syncTimer.value = new Date();
     sync.value = true;
-  }, 3000));
+  }, 2000));
 })
+
+onMounted(() => {
+  if (!list.value) return;
+  const element: HTMLElement = list.value;
+  element.addEventListener("scroll", () => {
+    const height = element.scrollTop + element.clientHeight;
+    const offset = element.scrollHeight - height;
+    if (offset < 20) pagination.update();
+  });
+});
 
 async function create() {
   const id = await api.newNote();
-  if (id !== undefined) await activeEditor(id);
+  if (id !== undefined) {
+    await activeEditor(id);
+    pagination.new(id);
+  }
 }
 
 async function activeEditor(_id: number) {
@@ -65,10 +75,7 @@ async function closeEditor() {
   editor.value = false;
   sync.value = true;
   api.saveNoteById(id.value, title.value, text.value).then(r => 0);
-
-  const idx = api.searchNotes(id.value, data.value);
-  data.value[idx].title = title.value;
-  data.value[idx].body = text.value;
+  pagination.save(id.value, title.value, text.value);
   id.value = 0;
   text.value = "";
   title.value = "";
@@ -100,7 +107,7 @@ setInterval(() => {
         <span class="name">{{ username }}</span>
       </div>
     </div>
-    <div class="list">
+    <div class="list" ref="list">
       <div class="item" v-for="item in data" @click="activeEditor(item.id)">
         <div class="header">
           <div class="title">{{ item.title }}</div><div class="grow" />
@@ -139,10 +146,23 @@ setInterval(() => {
   flex-grow: 1;
 }
 
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  max-height: 540px;
+}
+
 .item {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% - 12px);
   height: max-content;
   padding: 8px 32px;
   margin: 6px 4px;
