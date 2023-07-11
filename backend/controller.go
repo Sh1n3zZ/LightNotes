@@ -73,7 +73,7 @@ func AnonymousSendAPI(c *gin.Context) {
 
 	cache := c.MustGet("cache").(*redis.Client)
 	for {
-		code := GenerateCode(8)
+		code := GenerateCode(6)
 		key := fmt.Sprintf("note:anymous:%s", code)
 		res := cache.Get(c, key)
 		if res.Err() != nil && len(res.Val()) == 0 {

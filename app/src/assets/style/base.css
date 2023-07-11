@@ -51,6 +51,10 @@
   --card-border: #eee;
   --card-title: #333;
   --card-text: #666;
+  --card-desc: #999;
+  --card-input: #fff;
+  --card-input-border: rgba(0, 0, 0, 0.2);
+  --card-input-border-focus: rgba(0, 0, 0, 0.4);
 
   --markdown-color: #333;
   --markdown-theme-color: var(--vt-c-white-mute);
@@ -79,6 +83,10 @@
     --card-border: rgb(50, 50, 50);
     --card-title: #ddd;
     --card-text: #aaa;
+    --card-desc: #ccc;
+    --card-input: #181818;
+    --card-input-border: rgba(255, 255, 255, 0.2);
+    --card-input-border-focus: rgba(255, 255, 255, 0.4);
 
     --markdown-color: #eee;
     --markdown-theme-color: var(--vt-c-black-mute);

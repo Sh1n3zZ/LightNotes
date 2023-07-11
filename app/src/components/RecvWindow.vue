@@ -76,7 +76,7 @@ async function recv() {
         <div class="row">
           <input type="text" placeholder="标题" v-model="form.title" readonly />
         </div>
-        <div class="divider" style="background: rgb(50, 50, 50)" />
+        <div class="divider" style="background: var(--card-border)" />
         <div class="row textarea">
           <textarea placeholder="便签内容" v-model="form.body" readonly />
         </div>
@@ -119,7 +119,7 @@ async function recv() {
 }
 
 .loading {
-  fill: #fff;
+  fill: var(--text-color-full);
   width: 16px;
   height: 16px;
   margin: 4px;
@@ -165,7 +165,7 @@ async function recv() {
 
 .form button {
   justify-content: center;
-  margin: 20px 12px;
+  transform: translateY(18px);
 }
 
 .button {
@@ -175,10 +175,10 @@ async function recv() {
   height: 38px;
   padding: 6px;
   margin: 4px 12px;
-  border: 1px solid rgb(50, 50, 50);
+  border: 1px solid var(--card-border);
   border-radius: 6px;
-  background: rgb(40, 40, 40);
-  color: #fff;
+  background: var(--card-element);
+  color: var(--text-color-full);
   cursor: pointer;
   transition: 0.25s;
 }
@@ -188,7 +188,7 @@ async function recv() {
 }
 
 .button:hover {
-  background: rgb(50, 50, 50);
+  background: var(--card-border);
 }
 
 @keyframes RotateAnimation {
@@ -208,4 +208,5 @@ async function recv() {
     opacity: 1;
   }
 }
+
 </style>

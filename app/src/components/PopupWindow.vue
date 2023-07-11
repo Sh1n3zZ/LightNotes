@@ -45,12 +45,12 @@ onMounted(() => {
 .divider {
   width: 100%;
   height: 1px;
-  background: rgb(40, 40, 40);
+  background: var(--card-element);
   margin: 8px 0;
 }
 
 .window * {
-  color: #fff;
+  color: var(--text-color-full);
   user-select: none;
 }
 
@@ -64,7 +64,7 @@ onMounted(() => {
 }
 
 .window .form .column {
-  background: rgb(40, 40, 40);
+  background: var(--card-element);
   margin: 0;
   padding: 8px 12px;
   border-radius: 6px;
@@ -90,7 +90,7 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 400;
   margin: 4px 0 4px 28px;
-  color: #ccc;
+  color: var(--card-desc);
 }
 
 .window label {
@@ -102,21 +102,22 @@ onMounted(() => {
 }
 
 .window input {
-  background: #181818;
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
   margin: 10px 4px;
-  border: none;
   padding: 16px;
   width: 100%;
   height: 36px;
   border-radius: 16px;
   outline: none;
   letter-spacing: 0.01cm;
+  transition: .25s;
 }
 
 .window textarea {
-  background: #181818;
+  background: var(--card-input);
+  border: 1px solid var(--card-input-border);
   margin: 2px 8px;
-  border: none;
   padding: 16px;
   width: calc(100% - 16px);
   height: 240px;
@@ -125,6 +126,12 @@ onMounted(() => {
   letter-spacing: 0.01cm;
   resize: none;
   font-family: var(--fonts);
+  transition: .25s;
+}
+
+.window input:hover,
+.window textarea:hover {
+  border: 1px solid var(--card-input-border-focus);
 }
 
 .window input[type="checkbox"] {
@@ -137,11 +144,11 @@ onMounted(() => {
 }
 
 .window input[type="checkbox"]:checked {
-  background: #fff;
+  background: var(--text-color-full);
 }
 
 .window select {
-  background: rgb(30, 30, 30);
+  background: var(--card-background);
   border: none;
   border-radius: 4px;
   padding: 4px 8px 4px 8px;
@@ -149,7 +156,7 @@ onMounted(() => {
 }
 
 .window select option {
-  background: rgb(40, 40, 40);
+  background: var(--card-element);
   border: none;
   border-radius: 4px;
 }
@@ -170,8 +177,8 @@ onMounted(() => {
   transition: 0.5s;
   transform: translate(-50%, -50%);
   width: calc(100% - 52px);
-  height: min(80%, 540px);
-  background: rgb(30, 30, 30);
+  height: max-content;
+  background: var(--card-background);
   border-radius: 10px;
   max-width: 640px;
   z-index: -64;
@@ -199,7 +206,7 @@ onMounted(() => {
 
 .main {
   width: 100%;
-  height: 100%;
+  height: 60vh;
   overflow-x: hidden;
   overflow-y: auto;
   touch-action: pan-x;
@@ -216,11 +223,11 @@ onMounted(() => {
   cursor: pointer;
   transition: 0.25s;
   border-radius: 6px;
-  stroke: rgba(255, 255, 255, 0.8);
+  stroke: var(--text-color-active);
 }
 
 .close:hover {
-  background: rgb(40, 40, 40);
-  stroke: #fff;
+  background: var(--card-element);
+  stroke: var(--text-color-active);
 }
 </style>

@@ -59,7 +59,7 @@ async function copy() {
   if (await copyText(code.value)) {
     message.value = "复制成功！";
   } else {
-    message.value = "复制失败！请检查您的浏览器是否支持";
+    message.value = "复制失败！请手动复制";
   }
 }
 </script>
@@ -94,7 +94,7 @@ async function copy() {
             v-model="form.title"
           />
         </div>
-        <div class="divider" style="background: rgb(50, 50, 50)" />
+        <div class="divider" style="background: var(--card-border)" />
         <div class="row textarea">
           <textarea
             placeholder="请输入便签内容"
@@ -139,14 +139,15 @@ async function copy() {
 
 .code div {
   height: max-content;
-  font-size: 36px;
+  font-size: 42px;
   padding: 2px 12px;
   margin: 4px;
   opacity: 0;
-  color: rgb(94, 176, 253);
-  background: rgb(40, 40, 40);
+  color: var(--text-color-active);
+  background: var(--card-background);
   border-radius: 4px;
   animation: FadeInAnimation 1s ease-in-out forwards;
+  user-select: none;
 }
 
 .message {
@@ -157,7 +158,7 @@ async function copy() {
 }
 
 .loading {
-  fill: #fff;
+  fill: var(--text-color-full);
   width: 16px;
   height: 16px;
   margin: 4px;
@@ -187,7 +188,7 @@ async function copy() {
 
 .form button {
   justify-content: center;
-  margin: 20px 12px;
+  transform: translateY(18px);
 }
 
 .button {
@@ -197,10 +198,10 @@ async function copy() {
   height: 38px;
   padding: 6px;
   margin: 4px 12px;
-  border: 1px solid rgb(50, 50, 50);
+  border: 1px solid var(--card-border);
   border-radius: 6px;
-  background: rgb(40, 40, 40);
-  color: #fff;
+  background: var(--card-element);
+  color: var(--text-color-full);
   cursor: pointer;
   transition: 0.25s;
 }
@@ -214,7 +215,7 @@ async function copy() {
 }
 
 .button:hover {
-  background: rgb(50, 50, 50);
+  background: var(--card-border);
 }
 
 @keyframes RotateAnimation {
@@ -240,7 +241,8 @@ async function copy() {
     flex-wrap: wrap;
   }
   .code div {
-    font-size: 26px;
+    font-size: 32px;
+    padding: 2px;
   }
 }
 </style>
