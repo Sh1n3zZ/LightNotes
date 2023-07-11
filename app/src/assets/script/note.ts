@@ -97,6 +97,7 @@ export namespace api {
     }
 
     public save(id: number, title: string, body: string): void {
+      api.saveNoteById(id, title, body).then(res => {});
       const index = searchNotes(id, this.data.value);
       if (index != -1) {
         this.data.value[index].title = title;

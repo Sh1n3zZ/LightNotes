@@ -10,6 +10,7 @@ import Arrow from "@/components/icons/arrow.vue";
 import { api } from "@/assets/script/note";
 import Plus from "@/components/icons/plus.vue";
 import { formatDate } from "@/assets/script/utils";
+import Loading from "@/components/icons/loading.vue";
 
 const pagination = new api.NotePagination();
 const data = pagination.getRef();
@@ -17,6 +18,7 @@ const data = pagination.getRef();
 
 pagination.update();
 
+const loader = ref(false);
 const editor = ref(false);
 const id = ref(0);
 const text = ref("");
@@ -62,8 +64,10 @@ async function create() {
 
 async function activeEditor(_id: number) {
   editor.value = true;
+  loader.value = true;
   id.value = _id;
   const note = await api.getNoteById(_id);
+  loader.value = false;
   if (note) {
     syncTimer.value = new Date();
     text.value = note.body;
@@ -74,7 +78,6 @@ async function activeEditor(_id: number) {
 async function closeEditor() {
   editor.value = false;
   sync.value = true;
-  api.saveNoteById(id.value, title.value, text.value).then(r => 0);
   pagination.save(id.value, title.value, text.value);
   id.value = 0;
   text.value = "";
@@ -90,9 +93,9 @@ setInterval(() => {
   <div class="card editor" v-if="editor">
     <div class="header">
       <arrow class="arrow" @click="closeEditor" /><div class="grow" />
-      <div class="title">{{ title }}</div><div class="grow" />
+      <div class="title"><loading class="loading" v-if="loader" />{{ title }}</div><div class="grow" />
       <div class="user">
-        <div class="status" :class="{'sync': sync}" />
+        <div class="status" :class="{'sync': sync, 'error': loader}" />
         <span class="name">{{ syncText }}</span>
       </div>
     </div>
@@ -280,6 +283,19 @@ setInterval(() => {
   background: #0fab02;
 }
 
+.status.error {
+  background: #f00;
+}
+
+.loading {
+  fill: #fff;
+  width: 24px;
+  height: 24px;
+  margin: 0 4px;
+  transform: translateY(6px);
+  animation: RotateAnimation 2s linear infinite;
+}
+
 @media (max-width: 520px) {
   .title {
     height: max-content;
@@ -289,6 +305,15 @@ setInterval(() => {
 
   .user .name {
     display: none;
+  }
+}
+
+@keyframes RotateAnimation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
