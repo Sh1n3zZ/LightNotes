@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import axios from "axios";
 import { MdEditor } from "md-editor-v3";
+import type { Themes } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
 import { tools } from "@/assets/script/config";
@@ -14,7 +15,7 @@ import Loading from "@/components/icons/loading.vue";
 
 const pagination = new api.NotePagination();
 const data = pagination.getRef();
-const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+const theme = (window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light") as Themes;
 
 
 pagination.update();
