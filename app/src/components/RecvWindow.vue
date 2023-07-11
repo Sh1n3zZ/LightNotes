@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PopupWindow from "@/components/PopupWindow.vue";
 import { reactive, ref, watch } from "vue";
-import { window } from "@/assets/script/shared";
+import { _window } from "@/assets/script/shared";
 import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
 import Notification from "@/components/Notification.vue";
@@ -12,7 +12,7 @@ const form = reactive({
   body: "",
 });
 
-watch(window, (val) => {
+watch(_window, (val) => {
   if (!val.receive) {
     get.value = false;
     code.value = "";
@@ -62,7 +62,7 @@ async function recv() {
   <Notification v-if="message">
     {{ message }}
   </Notification>
-  <PopupWindow title="接收" v-model="window.receive">
+  <PopupWindow title="接收" v-model="_window.receive">
     <div class="form" v-if="!get">
       <span class="message">请输入您的接签码</span>
       <input class="input" v-model="code" maxlength="8" />

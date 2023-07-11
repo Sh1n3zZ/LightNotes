@@ -60,7 +60,7 @@ onMounted(async () => {
 }
 
 .error {
-  fill: #fff;
+  fill: var(--text-color-active);
   width: 46px;
   height: 46px;
   animation: FadeInAnimation 0.2s;
@@ -68,7 +68,7 @@ onMounted(async () => {
 }
 
 .message {
-  color: #eee;
+  color: var(--markdown-color);
   font-size: 18px;
   text-align: center;
   user-select: none;
@@ -90,7 +90,7 @@ onMounted(async () => {
   padding: 18px 12px;
   margin-bottom: 24px;
   font-size: 24px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-color-active);
   text-align: center;
 }
 
@@ -106,7 +106,7 @@ onMounted(async () => {
   height: 20px;
   position: absolute;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--text-color-full);
   left: 15%;
   transform-origin: 50%;
   animation: CircleAnimation 0.5s alternate infinite ease;

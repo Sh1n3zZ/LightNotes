@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PopupWindow from "@/components/PopupWindow.vue";
 import { reactive, ref, watch } from "vue";
-import { window } from "@/assets/script/shared";
+import { _window } from "@/assets/script/shared";
 import { copyText } from "@/assets/script/clipboard";
 import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
@@ -13,7 +13,7 @@ const form = reactive({
   body: "",
 });
 
-watch(window, (val) => {
+watch(_window, (val) => {
   if (!val.send) {
     code.value = "";
     form.title = "";
@@ -68,7 +68,7 @@ async function copy() {
   <Notification v-if="message">
     {{ message }}
   </Notification>
-  <PopupWindow title="发送" v-model="window.send">
+  <PopupWindow title="发送" v-model="_window.send">
     <div class="form" v-if="code">
       <span class="message">您的接签码为：</span>
       <div class="code">

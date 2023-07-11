@@ -2,7 +2,7 @@
 import User from "@/components/icons/user.vue";
 import Group from "@/components/icons/group.vue";
 import { reactive } from "vue";
-import { window } from "@/assets/script/shared";
+import { _window } from "@/assets/script/shared";
 import SendWindow from "@/components/SendWindow.vue";
 import RecvWindow from "@/components/RecvWindow.vue";
 import { auth } from "@/assets/script/auth";
@@ -62,13 +62,13 @@ function register() {
         </div>
       </div>
       <div class="embedded" :class="{ active: active.anonymous }">
-        <button @click="window.send = true" class="button">发送</button>
-        <button @click="window.receive = true" class="button">接收</button>
+        <button @click="_window.send = true" class="button">发送</button>
+        <button @click="_window.receive = true" class="button">接收</button>
       </div>
     </div>
   </div>
-  <SendWindow v-model="window.send"> </SendWindow>
-  <RecvWindow v-model="window.receive"> </RecvWindow>
+  <SendWindow v-model="_window.send"> </SendWindow>
+  <RecvWindow v-model="_window.receive"> </RecvWindow>
 </template>
 
 <style scoped>
@@ -80,9 +80,9 @@ function register() {
   width: min(500px, 90%);
   height: max-content;
   overflow: hidden;
-  background-color: rgb(30, 30, 30);
+  background-color: var(--card-background);
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
@@ -105,7 +105,7 @@ function register() {
 h1 {
   font-size: 24px;
   user-select: none;
-  color: white;
+  color: var(--text-color-active);
   text-align: center;
 }
 
@@ -118,7 +118,7 @@ h1 {
   padding: 8px 16px;
   border-radius: 8px;
   transition: 0.25s;
-  border: 1px solid rgba(50, 50, 50);
+  border: 1px solid var(--card-border);
   user-select: none;
   cursor: pointer;
 }
@@ -150,10 +150,10 @@ h1 {
   height: 38px;
   padding: 6px;
   margin: 4px 12px;
-  border: 1px solid rgb(50, 50, 50);
+  border: 1px solid var(--card-border);
   border-radius: 6px;
-  background: rgb(40, 40, 40);
-  color: #fff;
+  background: var(--card-element);
+  color: var(--text-color-full);
   cursor: pointer;
 }
 
@@ -169,12 +169,12 @@ h1 {
 .column .description span {
   font-size: 14px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-color-active);
 }
 
 .column .description p {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-color-leave);
 }
 
 .column svg {
@@ -182,7 +182,7 @@ h1 {
   width: 36px;
   height: 36px;
   margin: 12px 8px;
-  fill: #fff;
+  fill: var(--text-color-full);
 }
 
 .column.user svg {

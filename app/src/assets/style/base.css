@@ -1,6 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
+  --vt-c-paper: #fafcf1;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
@@ -15,7 +16,7 @@
   --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
   --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-1: rgba(255,256,255,0.8);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
@@ -26,7 +27,7 @@
 
 /* semantic color variables for this project */
 :root {
-  --color-background: var(--vt-c-white);
+  --color-background: var(--vt-c-paper);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
 
@@ -37,6 +38,22 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+
+  --text-color: rgba(0, 0, 0, 0.6);
+  --text-color-leave: rgba(0, 0, 0, 0.5);
+  --text-color-active: rgba(0, 0, 0, 0.8);
+  --text-color-full: #000;
+
+  --card-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  --card-background: #fff;
+  --card-element: rgba(0, 0, 0, 0.02);
+  --card-border: #eee;
+  --card-title: #333;
+  --card-text: #666;
+
+  --markdown-color: #333;
+  --markdown-theme-color: var(--vt-c-white-mute);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -50,6 +67,21 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+
+
+    --text-color: rgba(255, 255, 255, 0.6);
+    --text-color-leave: rgba(255, 255, 255, 0.5);
+    --text-color-active: rgba(255, 255, 255, 0.8);
+    --text-color-full: #fff;
+
+    --card-background: rgb(30, 30, 30);
+    --card-element: rgb(40, 40, 40);
+    --card-border: rgb(50, 50, 50);
+    --card-title: #ddd;
+    --card-text: #aaa;
+
+    --markdown-color: #eee;
+    --markdown-theme-color: var(--vt-c-black-mute);
   }
 }
 
@@ -82,9 +114,8 @@ html, main, body, #app {
 
 .md-editor * {
   font-family: var(--fonts);
-  color: #eee;
-
-  --md-theme-color: var(--vt-c-white-mute) !important;
+  color: var(--markdown-color) !important;
+  --md-theme-color: var(--markdown-theme-color) !important;
 }
 
 .default-theme h1 {

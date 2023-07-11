@@ -47,7 +47,7 @@ footer {
 
 footer .copyright {
   width: max-content;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-color);
   margin-bottom: 4px;
   transition: 0.25s;
   margin-left: auto;
@@ -55,16 +55,16 @@ footer .copyright {
 }
 
 footer .copyright a {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-color);
   background: none;
 }
 
 footer .copyright a:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-color-active);
 }
 
 .icp {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-color);
   margin-left: auto;
   text-decoration: none;
   background: none;
@@ -82,7 +82,7 @@ footer .copyright a:hover {
 }
 
 .icp:hover {
-  color: #fff;
+  color: var(--text-color-full);
 }
 
 .icp:hover img {

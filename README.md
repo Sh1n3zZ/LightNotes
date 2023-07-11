@@ -4,10 +4,15 @@
 
 # Light Notes
 
-大小事，随手记。一个极简、美观、多端同步、支持多种文件格式、支持解析多种文件的轻量化在线便签。 
+大小事，随手记。
 
-Keep small and large matters to heart.A lightweight note application that supports multiple file formats and parsing.
+一个极简、美观、多端同步、支持多种文件格式、支持解析多种文件的轻量化在线便签。 
 
+Keep small and large matters to heart.
+
+A lightweight note application that supports multiple file formats and parsing.
+
+<br>
 
 [![Code Stats](https://stats.deeptrain.net/repo/Sh1n3zZ/LightNotes/?theme=light)](https://notes.lightxi.com)
 

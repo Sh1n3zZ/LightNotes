@@ -5,7 +5,7 @@ import { MdEditor } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
 import { tools } from "@/assets/script/config";
-import { username } from "@/assets/script/shared";
+import { username, _window } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 import { api } from "@/assets/script/note";
 import Plus from "@/components/icons/plus.vue";
@@ -14,6 +14,7 @@ import Loading from "@/components/icons/loading.vue";
 
 const pagination = new api.NotePagination();
 const data = pagination.getRef();
+const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
 
 
 pagination.update();
@@ -99,7 +100,7 @@ setInterval(() => {
         <span class="name">{{ syncText }}</span>
       </div>
     </div>
-    <MdEditor v-model="text" theme="dark" :toolbars="tools" :preview="!mobile" />
+    <MdEditor v-model="text" :theme="theme" :toolbars="tools" :preview="!mobile" />
   </div>
   <div class="card" v-else>
     <div class="header">
@@ -133,9 +134,9 @@ setInterval(() => {
   height: max-content;
   min-height: 80vh;
   overflow: hidden;
-  background-color: rgb(30, 30, 30);
+  background-color: var(--card-background);
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
@@ -170,7 +171,7 @@ setInterval(() => {
   padding: 8px 32px;
   margin: 6px 4px;
   border-radius: 6px;
-  background: rgb(40,40,40);
+  background: var(--card-element);
   cursor: pointer;
   transition: .5s;
 }
@@ -178,7 +179,7 @@ setInterval(() => {
 .item .title {
   font-size: 20px;
   font-weight: 600;
-  color: #ddd;
+  color: var(--card-title);
   margin: 16px 4px 0;
   user-select: none;
   max-width: 80%;
@@ -190,7 +191,7 @@ setInterval(() => {
 .item .description {
   font-size: 16px;
   font-weight: 400;
-  color: #aaa;
+  color: var(--card-text);
   margin: 0 4px 8px;
   user-select: none;
   max-width: 90%;
@@ -208,7 +209,7 @@ setInterval(() => {
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #ddd;
+  color: var(--card-title);
   margin: 4px;
   user-select: none;
   transform: translateY(-12px);
@@ -221,7 +222,7 @@ setInterval(() => {
 .time {
   font-size: 16px;
   font-weight: 400;
-  color: #aaa;
+  color: var(--card-text);
   margin: 8px 4px 4px;
   user-select: none;
   max-width: 40%;
@@ -231,26 +232,26 @@ setInterval(() => {
 }
 
 .new {
-  fill: #ddd;
+  fill: var(--card-text);
   padding: 6px;
   margin: 2px;
   width: 32px;
   height: 32px;
   cursor: pointer;
-  background: rgb(40,40,40);
+  background: var(--card-element);
   border-radius: 4px;
   transform: translateY(-6px);
   flex-shrink: 0;
 }
 
 .arrow {
-  fill: #ddd;
+  fill: var(--card-text);
   padding: 6px;
   margin: 2px;
   width: 32px;
   height: 32px;
   cursor: pointer;
-  background: rgb(40,40,40);
+  background: var(--card-element);
   border-radius: 50%;
   transform: translateY(-6px);
   flex-shrink: 0;
@@ -259,7 +260,7 @@ setInterval(() => {
 .user {
   border-radius: 4px;
   padding: 4px 8px;
-  background: rgb(40,40,40);
+  background: var(--card-element);
   margin: 6px 4px;
   user-select: none;
   float: right;
@@ -288,12 +289,16 @@ setInterval(() => {
 }
 
 .loading {
-  fill: #fff;
+  fill: var(--card-text);
   width: 24px;
   height: 24px;
   margin: 0 4px;
   transform: translateY(6px);
   animation: RotateAnimation 2s linear infinite;
+}
+
+.user .name {
+  color: var(--card-text);
 }
 
 @media (max-width: 520px) {

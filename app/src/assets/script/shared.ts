@@ -2,7 +2,7 @@ import { watch, ref, reactive } from "vue";
 import axios from "axios";
 import { auth } from "@/assets/script/auth";
 
-export const window = reactive({
+export const _window = reactive({
   send: false,
   receive: false,
 });
