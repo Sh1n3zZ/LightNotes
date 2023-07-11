@@ -57,11 +57,13 @@ export namespace api {
     public total: Ref<number>;
     protected data: Ref<Note[]>;
     protected end: boolean;
+    protected lock: boolean;
 
     public constructor() {
       this.page = ref(1);
       this.total = ref(0);
       this.data = ref([]);
+      this.lock = false;
       this.end = false;
     }
 
@@ -70,7 +72,10 @@ export namespace api {
     }
 
     public async update(): Promise<void> {
+      if (this.lock) return;
       if (this.end) return;
+
+      this.lock = true;
       const data = await getNotes(this.page.value);
       this.total.value = data.total;
       this.data.value = this.data.value.concat(data.notes);
@@ -79,6 +84,7 @@ export namespace api {
       } else {
         this.end = true;
       }
+      this.lock = false;
     }
 
     public new(id: number): void {
