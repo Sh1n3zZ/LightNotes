@@ -172,6 +172,7 @@ setInterval(() => {
   padding: 8px 32px;
   margin: 6px 4px;
   border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background: var(--card-element);
   cursor: pointer;
   transition: .5s;

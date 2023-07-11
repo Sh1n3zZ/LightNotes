@@ -46,8 +46,8 @@
   --text-color-full: #000;
 
   --card-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  --card-background: #fff;
-  --card-element: rgba(0, 0, 0, 0.02);
+  --card-background: rgba(252, 252, 252);
+  --card-element: #fff;
   --card-border: #eee;
   --card-title: #333;
   --card-text: #666;
