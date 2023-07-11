@@ -114,7 +114,8 @@ html, main, body, #app {
 
 .md-editor * {
   font-family: var(--fonts);
-  color: var(--markdown-color) !important;
+  color: var(--markdown-color);
+  --md-theme-code-block-color: var(--markdown-theme-color);
   --md-theme-color: var(--markdown-theme-color) !important;
 }
 
