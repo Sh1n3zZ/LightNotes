@@ -177,7 +177,7 @@ onMounted(() => {
   transition: 0.5s;
   transform: translate(-50%, -50%);
   width: calc(100% - 52px);
-  height: max-content;
+  height: 80vh;
   background: var(--card-background);
   border-radius: 10px;
   max-width: 640px;

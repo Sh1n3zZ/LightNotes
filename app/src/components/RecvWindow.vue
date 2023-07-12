@@ -165,7 +165,7 @@ async function recv() {
 
 .form button {
   justify-content: center;
-  transform: translateY(18px);
+  transform: translateY(12px);
 }
 
 .button {
