@@ -31,6 +31,6 @@
   animation: FloatInOut 5s ease-in-out forwards;
   text-wrap: none;
   white-space: nowrap;
-  z-index: 64;
+  z-index: 128;
 }
 </style>
