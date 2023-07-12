@@ -1,11 +1,13 @@
-<script setup lang="ts">
+<script setup lang="ts" xmlns="">
 import { RouterView } from "vue-router";
 </script>
 
 <template>
   <router-view v-slot="{ Component }">
     <transition name="fade">
-      <component :is="Component" />
+      <main>
+        <component :is="Component" />
+      </main>
     </transition>
   </router-view>
   <footer>

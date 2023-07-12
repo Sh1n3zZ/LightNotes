@@ -105,5 +105,13 @@ export namespace api {
         this.data.value[index].updated_at = new Date(Date.now() + 8 * 3600000).toString();
       }
     }
+
+    public delete(id: number): void {
+      api.deleteNoteById(id).then(res => {});
+      const index = searchNotes(id, this.data.value);
+      if (index != -1) {
+        this.data.value.splice(index, 1);
+      }
+    }
   }
 }

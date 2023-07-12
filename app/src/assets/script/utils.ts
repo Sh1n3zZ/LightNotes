@@ -29,3 +29,7 @@ export function formatDate(time: string | Date, offset: boolean = true): string 
 export function padZero(n: number): string {
   return (n < 10 ? '0' : '') + n;
 }
+
+export function contain(el: HTMLElement | null | undefined, target: HTMLElement | null): boolean {
+  return (el && target) ? (el == target || el.contains(target)) : false;
+}

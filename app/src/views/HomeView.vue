@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import axios from "axios";
 import { MdEditor } from "md-editor-v3";
 import type { Themes } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 
 import { tools } from "@/assets/script/config";
-import { username, _window } from "@/assets/script/shared";
+import { username } from "@/assets/script/shared";
 import Arrow from "@/components/icons/arrow.vue";
 import { api } from "@/assets/script/note";
 import Plus from "@/components/icons/plus.vue";
 import { formatDate } from "@/assets/script/utils";
 import Loading from "@/components/icons/loading.vue";
+import Trash from "@/components/icons/trash.vue";
+import Dialog from "@/components/Dialog.vue";
 
 const pagination = new api.NotePagination();
 const data = pagination.getRef();
@@ -20,6 +21,7 @@ const theme = (window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark
 
 pagination.update();
 
+const deleter = ref(false);
 const loader = ref(false);
 const editor = ref(false);
 const id = ref(0);
@@ -86,16 +88,30 @@ async function closeEditor() {
   title.value = "";
 }
 
+function onDelete() {
+  editor.value = false;
+  sync.value = true;
+  pagination.delete(id.value);
+  id.value = 0;
+  text.value = "";
+  title.value = "";
+}
+
 setInterval(() => {
   syncText.value = formatDate(syncTimer.value, false);
 }, 1000);
 </script>
 
 <template>
+  <Dialog v-model="deleter" @check="onDelete">确定删除该便签？</Dialog>
   <div class="card editor" v-if="editor">
     <div class="header">
       <arrow class="arrow" @click="closeEditor" /><div class="grow" />
-      <div class="title"><loading class="loading" v-if="loader" />{{ title }}</div><div class="grow" />
+      <div class="title">
+        <loading class="loading" v-if="loader" />{{ title }}
+      </div>
+      <div class="grow" />
+      <trash class="delete" @click="deleter = true" />
       <div class="user">
         <div class="status" :class="{'sync': sync, 'error': loader}" />
         <span class="name">{{ syncText }}</span>
@@ -219,6 +235,19 @@ setInterval(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.delete {
+  fill: var(--card-text);
+  padding: 6px;
+  margin: 2px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: var(--card-element);
+  border-radius: 4px;
+  transform: translateY(-6px);
+  flex-shrink: 0;
 }
 
 .time {

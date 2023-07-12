@@ -9,6 +9,8 @@
   --vt-c-black-soft: #222222;
   --vt-c-black-mute: #282828;
 
+  --vt-c-blue: #5fa9fd;
+  --vt-c-blue-hover: #4d8af0;
   --vt-c-indigo: #2c3e50;
 
   --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
@@ -55,6 +57,7 @@
   --card-input: #fff;
   --card-input-border: rgba(0, 0, 0, 0.2);
   --card-input-border-focus: rgba(0, 0, 0, 0.4);
+  --dialog-cover: rgba(0, 0, 0, 0.01);
 
   --markdown-color: #333;
   --markdown-theme-color: var(--vt-c-white-mute);
@@ -87,6 +90,7 @@
     --card-input: #181818;
     --card-input-border: rgba(255, 255, 255, 0.2);
     --card-input-border-focus: rgba(255, 255, 255, 0.4);
+    --dialog-cover: rgba(255, 255, 255, 0.01);
 
     --markdown-color: #eee;
     --markdown-theme-color: var(--vt-c-black-mute);
