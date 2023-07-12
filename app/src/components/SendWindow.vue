@@ -7,6 +7,7 @@ import Loading from "@/components/icons/loading.vue";
 import axios from "axios";
 import Notification from "@/components/Notification.vue";
 
+const support = ref(true);
 const loader = ref(false);
 const form = reactive({
   title: "",
@@ -59,6 +60,7 @@ async function copy() {
   if (await copyText(code.value)) {
     message.value = "复制成功！";
   } else {
+    support.value = false;
     message.value = "复制失败！请手动复制";
   }
 }
@@ -80,9 +82,10 @@ async function copy() {
           {{ value }}
         </div>
       </div>
-      <button class="button copy" @click="copy">
+      <button class="button copy" @click="copy" v-if="support">
         <span>复制</span>
       </button>
+      <input class="copy-input" v-model="code" readonly v-else>
     </div>
     <div class="form" v-else>
       <div class="column">
@@ -148,6 +151,12 @@ async function copy() {
   border-radius: 4px;
   animation: FadeInAnimation 1s ease-in-out forwards;
   user-select: none;
+}
+
+.copy-input {
+  text-align: center;
+  width: 40vh;
+  font-size: 18px !important;
 }
 
 .message {
