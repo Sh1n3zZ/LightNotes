@@ -23,6 +23,7 @@ pagination.update();
 
 const deleter = ref(false);
 const loader = ref(false);
+const toggle = ref(false);
 const editor = ref(false);
 const id = ref(0);
 const text = ref("");
@@ -36,16 +37,12 @@ const list = ref<HTMLElement>();
 
 let timer: number;
 watch(text, () => {
-  const data = text.value.split("\n")[0];
-  title.value = data.replace(/^#*|#+$/g, "");
   sync.value = false;
-
-  clearTimeout(timer);
-  timer = Number(setTimeout(async () => {
-    await api.saveNoteById(id.value, title.value, text.value);
-    syncTimer.value = new Date();
-    sync.value = true;
-  }, 2000));
+  save();
+})
+watch(title, () => {
+  sync.value = false;
+  save();
 })
 
 onMounted(() => {
@@ -66,6 +63,15 @@ async function create() {
   }
 }
 
+function save() {
+  clearTimeout(timer);
+  timer = Number(setTimeout(async () => {
+    await api.saveNoteById(id.value, title.value, text.value);
+    syncTimer.value = new Date();
+    sync.value = true;
+  }, 2000));
+}
+
 async function activeEditor(_id: number) {
   editor.value = true;
   loader.value = true;
@@ -81,6 +87,7 @@ async function activeEditor(_id: number) {
 
 async function closeEditor() {
   editor.value = false;
+  toggle.value = false;
   sync.value = true;
   pagination.save(id.value, title.value, text.value);
   id.value = 0;
@@ -90,6 +97,7 @@ async function closeEditor() {
 
 function onDelete() {
   editor.value = false;
+  toggle.value = false;
   sync.value = true;
   pagination.delete(id.value);
   id.value = 0;
@@ -108,7 +116,9 @@ setInterval(() => {
     <div class="header">
       <arrow class="arrow" @click="closeEditor" /><div class="grow" />
       <div class="title">
-        <loading class="loading" v-if="loader" />{{ title }}
+        <loading class="loading" v-if="loader" />
+        <input v-model="title" v-if="toggle">
+        <span v-else @click="toggle = true">{{ title }}</span>
       </div>
       <div class="grow" />
       <trash class="delete" @click="deleter = true" />
@@ -121,7 +131,8 @@ setInterval(() => {
   </div>
   <div class="card" v-else>
     <div class="header">
-      <div class="title">Notes</div><div class="grow" />
+      <div class="title">Notes</div>
+      <div class="grow" />
       <plus class="new" @click="create" />
       <div class="user">
         <div class="status sync" />
@@ -225,14 +236,37 @@ setInterval(() => {
 }
 
 .title {
-  font-size: 24px;
-  font-weight: 600;
   color: var(--card-title);
   margin: 4px;
   user-select: none;
   transform: translateY(-12px);
   max-width: 60%;
   overflow: hidden;
+}
+
+.title input {
+  background: var(--card-input);
+  border: 1px solid rgb(0,0,0,0);
+  color: var(--text-color-active);
+  margin: 2px 4px;
+  padding: 16px;
+  width: calc(100% - 4px);
+  height: 24px;
+  border-radius: 16px;
+  outline: none;
+  text-align: center;
+  transition: .25s;
+}
+
+.title input:focus,
+.title input:active {
+  border: 1px solid var(--card-input-border);
+}
+
+.title span {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--card-title);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
