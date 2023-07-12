@@ -34,7 +34,7 @@ async function recv() {
   loader.value = true;
 
   const param = code.value.trim();
-  if (param.length !== 8) {
+  if (param.length === 0) {
     message.value = "请输入正确的接签码";
     loader.value = false;
     return;
