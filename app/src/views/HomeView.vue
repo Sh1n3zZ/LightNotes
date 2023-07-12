@@ -160,7 +160,7 @@ setInterval(() => {
   width: min(620px, 90%);
   max-width: 90%;
   height: max-content;
-  min-height: 80vh;
+  max-height: 80vh;
   overflow: hidden;
   background-color: var(--card-background);
   border-radius: 12px;
