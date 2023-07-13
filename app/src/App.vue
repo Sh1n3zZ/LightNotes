@@ -16,8 +16,12 @@ import { RouterView } from "vue-router";
       <a href="https://lightxi.com" target="_blank">LightXi Cloud</a></span
     >
     <a class="icp" href="https://beian.miit.gov.cn/" target="_blank">
-      <img src="/gov.webp" alt="icp" />
+      <img src="/gov.webp" alt="" />
       <span>粤ICP备2023066011号-1</span>
+    </a>
+    <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44040302000432" class="icp">
+      <img src="/sec.webp" alt="" />
+      <span>粤公网安备 44040302000432号</span>
     </a>
   </footer>
 </template>
