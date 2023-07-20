@@ -27,11 +27,11 @@ function toggleUser() {
 }
 
 function login() {
-  location.href = "https://deeptrain.vercel.app/login?app=lightnotes";
+  location.href = "https://deeptrain.net/login?app=lightnotes";
 }
 
 function register() {
-  location.href = "https://deeptrain.vercel.app/register?app=lightnotes";
+  location.href = "https://deeptrain.net/register?app=lightnotes";
 }
 </script>
 <template>

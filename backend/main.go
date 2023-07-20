@@ -22,6 +22,7 @@ func main() {
 	}
 
 	{
+		app.Use(middleware.CORSMiddleware())
 		app.Use(middleware.BuiltinMiddleWare(ConnectMySQL(), ConnectRedis()))
 		app.Use(middleware.ThrottleMiddleware())
 		app.Use(AuthMiddleware())
