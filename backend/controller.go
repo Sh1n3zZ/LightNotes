@@ -59,6 +59,7 @@ func AnonymousSendAPI(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
 			"error":  "bad request",
+			"reason": err.Error(),
 		})
 		return
 	}

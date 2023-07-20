@@ -1,4 +1,5 @@
 import Extension from './include/plugin'
+import axios from 'axios'
 
 new Extension({
   id: 'notes',
@@ -14,16 +15,13 @@ new Extension({
         return "标题或内容不能为空"
       }
       try {
-        const res = await fetch("https://notes.lightxi.com/api/anonymous/send", {
-          method: "POST",
+        const res = await axios.post("https://notes.lightxi.com/api/anonymous/send", { title, body }, {
           headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ title, body }),
-        });
-        const data = await res.json();
-        if (!data.status) return "发送失败！请稍后重试";
-        return data.code;
+        })
+        if (!res.data.status) return "发送失败！请稍后重试";
+        return res.data.code;
       } catch (e) {
         console.debug(e);
         return "发送失败！请检查您的网络环境";
@@ -38,16 +36,39 @@ new Extension({
         return "接收失败！取签码不能为空"
       }
       try {
-        const res = await fetch(`https://notes.lightxi.com/api/anonymous/get?code=${code}`);
-        const data = await res.json();
-        if (!data.status) return "接收失败！请检查您的接签码是否正确，匿名便签是否过期";
-        return {
-          title: data.title,
-          body: data.body,
-        };
+        const res = await axios.get(`https://notes.lightxi.com/api/anonymous/get?code=${code}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        if (!res.data.status) return "接收失败！请检查您的接签码是否正确，匿名便签是否过期";
+        return JSON.stringify({
+          title: res.data.title,
+          body: res.data.body,
+        })
       } catch (e) {
         console.debug(e);
         return "接收失败！请检查您的网络环境";
+      }
+    }
+  }, {
+    opcode: "exist",
+    blockType: "Boolean",
+    text: "便签是否存在 [code:number]",
+    bind: async function ({ code }): Promise<boolean> {
+      if (!code) {
+        return false
+      }
+      try {
+        const res = await axios.get(`https://notes.lightxi.com/api/anonymous/get?code=${code}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        return res.data.status;
+      } catch (e) {
+        console.debug(e);
+        return false;
       }
     }
   }, {
