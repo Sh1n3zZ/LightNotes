@@ -1,0 +1,41 @@
+{
+  "name": "turbowarp-clipx",
+  "version": "1.1.0",
+  "description": "📦 TurboWarp development-env extension plugin",
+  "main": "index.ts",
+  "scripts": {
+    "i18n": "ts-node src/index",
+    "dev": "webpack --watch",
+    "build": "ts-node src/index && webpack",
+    "lint": "eslint src/** --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zmh-program/turbowarp-clipx.git"
+  },
+  "keywords": [
+    "turbowarp",
+    "typescript"
+  ],
+  "author": "zmh-program",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zmh-program/turbowarp-clipx/issues"
+  },
+  "homepage": "https://github.com/zmh-program/turbowarp-clipx#readme",
+  "devDependencies": {
+    "@turbowarp/types": "^0.0.9",
+    "@types/node": "^20.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "eslint": "^8.37.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  }
+}
