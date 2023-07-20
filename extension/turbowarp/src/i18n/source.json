@@ -1,12 +1,14 @@
 {
-  "en": {
-    "title": "随记便签",
-    "send": "发送随记便签 标题 [title] 内容 [body] (漂流瓶特有的会丢失~)",
-    "get": "获取随记便签 取签码 [code]"
-  },
   "zh": {
     "title": "随记便签",
     "send": "发送随记便签 标题 [title] 内容 [body] (漂流瓶特有的会丢失~)",
-    "get": "获取随记便签 取签码 [code]"
+    "get": "获取随记便签 取签码 [code]",
+    "website": "寻找河流的源头..."
+  },
+  "en": {
+    "title": "Write a note",
+    "send": "Send a casual tag title [title] Content [body] (drift bottles are unique and will be lost ~)",
+    "get": "Get a casual signature code [code]",
+    "website": "Finding the source of the river..."
   }
 }
