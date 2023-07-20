@@ -11,6 +11,7 @@ export interface Option {
   debug?: boolean  // Defaults to false if not specified.
   uptime?: number // Timing of cache cleaning. Defaults to 60(secs) if not specified.
   i18n?: I18nConfig // Defaults to undefined if not specified.
+  onload?: () => void // Defaults to undefined if not specified.
 }
 
 export interface Block {

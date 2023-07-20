@@ -4,6 +4,8 @@
     "send": "发送随记便签 标题 [title] 内容 [body] (漂流瓶特有的会丢失~)",
     "get": "获取随记便签 取签码 [code]",
     "exist": "便签是否存在 [code]",
+    "login": "登录随记便签 账号",
+    "close": "关闭验证窗口",
     "website": "寻找河流的源头..."
   },
   "en": {
@@ -11,6 +13,8 @@
     "send": "Send a casual tag title [title] Content [body] (drift bottles are unique and will be lost ~)",
     "get": "Get a casual signature code [code]",
     "exist": "Presence of notes [code]",
+    "login": "Log in to your memo account",
+    "close": "Close verification window",
     "website": "Finding the source of the river..."
   }
 }

@@ -91,6 +91,7 @@ export default class Extension {
     if (commonjs) return;
     try {
       Scratch.extensions.register(this);
+      if (this.option.onload != null) this.option.onload();
     } catch (e) {
       console.info(`Failed to load extension ${this.option.name}`);
       if (this.option.debug) console.error(e);
