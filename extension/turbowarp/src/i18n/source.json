@@ -6,7 +6,18 @@
     "exist": "随记便签是否存在 [code]",
     "login": "登录 lightnotes 账号",
     "close": "关闭验证窗口",
-    "website": "寻找河流的源头..."
+    "logout": "退出登录",
+    "check": "是否登录",
+    "uget": "获取便签  id [id]",
+    "utime": "获取便签更新时间  id [id]",
+    "unew": "新建便签 标题 [title] 内容 [body]",
+    "uupdate": "更新便签 id [id] 标题 [title] 内容 [body]",
+    "udelete": "删除便签  id [id]",
+    "ulist": "获取便签列表  第 [page] 页",
+    "utotal": "获取便签页数",
+    "uprev": "第 [page] 页是否有上一页",
+    "unext": "第 [page] 页是否有下一页",
+    "website": "Lightnotes 官网"
   },
   "en": {
     "title": "Memorize Lightnotes",
@@ -15,6 +26,17 @@
     "exist": "Presence of a casual sticky note [code]",
     "login": "Log in to your lightnotes account",
     "close": "Close verification window",
-    "website": "Finding the source of the river..."
+    "logout": "Log out",
+    "check": "Logged in or not",
+    "uget": "Get note id [id]",
+    "utime": "Get note update time id [id]",
+    "unew": "New Note Heading [title] Content [body]",
+    "uupdate": "Update note id [id] title [title] content [body]",
+    "udelete": "Delete note id [id]",
+    "ulist": "Get notes list page [page]",
+    "utotal": "Get the number of note pages",
+    "uprev": "Is there a previous page on page [page]",
+    "unext": "Is there a next page on page [page]",
+    "website": "Lightnotes' website"
   }
 }
