@@ -13,7 +13,7 @@ function setDisplay(state: boolean): boolean {
 
 new Extension({
   id: 'notes',
-  name: '随记便签',
+  name: '随记便签 Lightnotes',
   color1: '#69b7f7',
   blocks: [{
     opcode: "send",
@@ -64,11 +64,9 @@ new Extension({
   }, {
     opcode: "exist",
     blockType: "Boolean",
-    text: "便签是否存在 [code:number]",
+    text: "随记便签是否存在 [code:number]",
     bind: async function ({ code }): Promise<boolean> {
-      if (!code) {
-        return false
-      }
+      if (!code) return false
       try {
         const res = await axios.get(`https://notes.lightxi.com/api/anonymous/get?code=${code}`, {
           headers: {
@@ -84,7 +82,7 @@ new Extension({
   }, {
     opcode: "login",
     blockType: "command",
-    text: "登录随记便签 账号",
+    text: "登录 lightnotes 账号",
     bind: function (): void {
       setDisplay(true);
     }
@@ -154,35 +152,23 @@ new Extension({
     container.appendChild(close);
 
     const frame = document.createElement('iframe');
-    frame.src = 'https://notes.lightxi.com/';
+    frame.src = 'http://localhost:5173/';
     frame.style.width = '100%';
     frame.style.height = '100%';
     frame.style.border = 'none';
     frame.onload = () => {
       const iframe = frame.contentWindow;
       if (!iframe) return;
-      iframe.postMessage({ type: 'login' }, '*');
+      setInterval(() => {
+        iframe.postMessage({ type: 'login' }, '*');
+      }, 1000);
+      window.addEventListener('message', (e) => {
+        console.log(e.data);
+        if (e.data.type === 'login') {
+
+        }
+      }, false);
     }
     container.appendChild(frame);
-
-    container.addEventListener('mousedown', (event) => {
-      isDragging = true;
-      offsetX = event.clientX - container.offsetLeft;
-      offsetY = event.clientY - container.offsetTop;
-      container.style.cursor = 'grabbing';
-    });
-
-    document.addEventListener('mousemove', (event) => {
-      if (!isDragging) return;
-      const x = event.clientX - offsetX;
-      const y = event.clientY - offsetY;
-      container.style.left = x + 'px';
-      container.style.top = y + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      container.style.cursor = 'grab';
-    });
   }
 }).register()
