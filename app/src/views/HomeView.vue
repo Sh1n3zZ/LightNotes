@@ -140,18 +140,23 @@ setInterval(() => {
       </div>
     </div>
     <div class="list" ref="list">
-      <div class="item" v-for="item in data" @click="activeEditor(item.id)">
+      <div class="item" v-for="item in data" @click="activeEditor(item.id)" v-if="data.length">
         <div class="header">
           <div class="title">{{ item.title }}</div><div class="grow" />
           <div class="time">{{ formatDate(item.updated_at) }}</div>
         </div>
         <div class="description">{{ item.body }}</div>
       </div>
+      <div class="empty" v-else>
+        空空如也...
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+@import "@/assets/style/anim.css";
+
 .card {
   position: absolute;
   top: 50%;
@@ -161,6 +166,7 @@ setInterval(() => {
   max-width: 90%;
   height: max-content;
   max-height: 80vh;
+  min-height: 360px;
   overflow: hidden;
   background-color: var(--card-background);
   border-radius: 12px;
@@ -168,10 +174,21 @@ setInterval(() => {
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
+  animation: FadeInAnimation 0.35s;
+}
+
+.empty {
+  position: absolute;
+  color: var(--text-color-active);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  user-select: none;
 }
 
 .card.editor {
-  width: min(1020px, 90%);
+  width: min(1240px, 90%);
 }
 
 .grow {

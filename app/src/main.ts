@@ -28,8 +28,12 @@ window.addEventListener("message", (e) => {
   }
 }, false);
 
-for (const i of cors) {
-  window.parent.postMessage({
-    type: "ping",
-  }, i);
+try {
+  for (const i of cors) {
+    window.parent.postMessage({
+      type: "ping",
+    }, i);
+  }
+} catch {
+  // ignore
 }

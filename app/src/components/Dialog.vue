@@ -59,6 +59,7 @@ function check() {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: -64;
+  opacity: 0;
   width: 260px;
   height: max-content;
   padding: 24px 24px;
@@ -88,6 +89,7 @@ function check() {
 
 .cover.active {
   z-index: 32;
+  opacity: 1;
   background: var(--dialog-cover);
 }
 
