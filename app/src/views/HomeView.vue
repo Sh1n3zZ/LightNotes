@@ -13,6 +13,9 @@ import { formatDate } from "@/assets/script/utils";
 import Loading from "@/components/icons/loading.vue";
 import Trash from "@/components/icons/trash.vue";
 import Dialog from "@/components/Dialog.vue";
+import Exit from "@/components/icons/exit.vue";
+import { auth } from "@/assets/script/auth";
+import router from "@/router";
 
 const pagination = new api.NotePagination();
 const data = pagination.getRef();
@@ -22,6 +25,7 @@ const theme = (window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark
 pagination.update();
 
 const deleter = ref(false);
+const logout_dialog = ref(false);
 const loader = ref(false);
 const toggle = ref(false);
 const editor = ref(false);
@@ -105,6 +109,12 @@ function onDelete() {
   title.value = "";
 }
 
+function logout() {
+  auth.value = false;
+  username.value = "";
+  router.push("/");
+}
+
 setInterval(() => {
   syncText.value = formatDate(syncTimer.value, false);
 }, 1000);
@@ -112,6 +122,7 @@ setInterval(() => {
 
 <template>
   <Dialog v-model="deleter" @check="onDelete">确定删除该便签？</Dialog>
+  <Dialog v-model="logout_dialog" @check="logout">确定退出登录？</Dialog>
   <div class="card editor" v-if="editor">
     <div class="header">
       <arrow class="arrow" @click="closeEditor" /><div class="grow" />
@@ -131,13 +142,13 @@ setInterval(() => {
   </div>
   <div class="card" v-else>
     <div class="header">
-      <div class="title">Notes</div>
-      <div class="grow" />
-      <plus class="new" @click="create" />
       <div class="user">
         <div class="status sync" />
         <span class="name">{{ username }}</span>
       </div>
+      <div class="grow" />
+      <exit class="exit" @click="logout_dialog = true" />
+      <plus class="new" @click="create" />
     </div>
     <div class="list" ref="list">
       <div class="item" v-for="item in data" @click="activeEditor(item.id)" v-if="data.length">
@@ -174,7 +185,7 @@ setInterval(() => {
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
-  animation: FadeInAnimation 0.35s;
+  animation: FadeInAnimation 0.25s;
 }
 
 .empty {
@@ -313,8 +324,9 @@ setInterval(() => {
   white-space: nowrap;
 }
 
-.new {
-  fill: var(--card-text);
+.exit {
+  stroke: var(--card-text);
+  stroke-width: 32px;
   padding: 6px;
   margin: 2px;
   width: 32px;
@@ -324,6 +336,30 @@ setInterval(() => {
   border-radius: 4px;
   transform: translateY(-6px);
   flex-shrink: 0;
+  transition: .25s;
+  fill: none;
+}
+
+.exit:hover {
+  stroke: var(--text-color-active);
+}
+
+.new {
+  fill: var(--card-text);
+  padding: 6px;
+  margin: 2px 8px 2px 2px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: var(--card-element);
+  border-radius: 4px;
+  transform: translateY(-6px);
+  flex-shrink: 0;
+  transition: .25s;
+}
+
+.new:hover {
+  fill: var(--text-color-active);
 }
 
 .arrow {
@@ -381,6 +417,11 @@ setInterval(() => {
 
 .user .name {
   color: var(--card-text);
+  transition: .25s;
+}
+
+.user .name:hover {
+  color: var(--text-color-active);
 }
 
 @media (max-width: 520px) {

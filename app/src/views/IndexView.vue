@@ -72,6 +72,8 @@ function register() {
 </template>
 
 <style scoped>
+@import "@/assets/style/anim.css";
+
 .card {
   position: absolute;
   top: 50%;
@@ -86,6 +88,7 @@ function register() {
   padding: 20px;
   transition: 0.25s, max-height 0.5s;
   z-index: 1;
+  animation: FadeInAnimation 0.25s;
 }
 
 .title {
