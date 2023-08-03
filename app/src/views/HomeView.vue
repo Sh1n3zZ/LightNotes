@@ -143,9 +143,9 @@ setInterval(() => {
   <div class="card" v-else>
     <div class="header">
       <div class="user">
-        <div class="status sync" />
-        <span class="name">{{ username }}</span>
+        <img :src="'https://api.deeptrain.net/avatar/' + username" alt="" class="avatar" />
       </div>
+      <span class="username">{{ username }}</span>
       <div class="grow" />
       <exit class="exit" @click="logout_dialog = true" />
       <plus class="new" @click="create" />
@@ -377,13 +377,34 @@ setInterval(() => {
 
 .user {
   border-radius: 4px;
-  padding: 4px 8px;
   background: var(--card-element);
   margin: 6px 4px;
   user-select: none;
-  float: right;
-  height: max-content;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
   transform: translateY(-12px);
+}
+
+.username {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-color-active);
+  margin: 0 4px;
+  user-select: none;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: .5s;
+}
+
+.user .avatar {
+  width: 32px;
+  height: 32px;
+  margin: 2px;
+  border-radius: 4px;
 }
 
 .status {
