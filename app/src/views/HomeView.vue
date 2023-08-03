@@ -381,10 +381,14 @@ setInterval(() => {
   margin: 6px 4px;
   user-select: none;
   height: 36px;
-  align-items: center;
-  justify-content: center;
   width: max-content;
   transform: translateY(-12px);
+}
+
+.editor .user {
+  padding: 6px 8px 2px;
+  float: right;
+  height: max-content;
 }
 
 .username {
